@@ -25,7 +25,7 @@ class HTTPServerThread(threading.Thread):
         cert = os.path.join(BASEDIR, "ssl.crt")
         key = os.path.join(BASEDIR, "ssl.key")
 
-        self.httpd.socket = ssl.wrap_socket(self.httpd.socket, certfile=cert, keyfile=key, server_side=True)
+#        self.httpd.socket = ssl.wrap_socket(self.httpd.socket, certfile=cert, keyfile=key, server_side=True)
 
         print "Thread : %s. %s:%s initialized" % (self.name, self.ipaddress, str(self.port))
 
@@ -54,6 +54,7 @@ def simple_app(environ, start_response):
             request_body = environ['wsgi.input'].read(request_body_size)
             DATA = json.loads(request_body)  # turns the qs to a dict
             msg = 'From POST: %s' % str(DATA)
+            print msg 
         except Exception as ex:
             status = '500 OOPS'
             headers = [('Content-Type', 'text/plain')]

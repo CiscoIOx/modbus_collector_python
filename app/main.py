@@ -9,10 +9,11 @@ import re
 import httplib, urllib
 import ssl
 import logging
+from pymodbus.client.sync import ModbusTcpClient as ModbusClient
 
 from ConfigParser import SafeConfigParser
 
-logger = logging.getLogger("gwapp")
+logger = logging.getLogger("modbusapp")
 
 from logging.handlers import RotatingFileHandler
 from wsgiref.simple_server import make_server
@@ -128,7 +129,7 @@ def send_to_cloud(content):
     scheme = cfg.get("cloud", "scheme")
     logger.debug("Connecting to https://%s:%s", server, port)
 
-    conn = httplib.HTTPSConnection(server, port)
+    conn = httplib.HTTPConnection(server, port)
     content = json.dumps(content)
     headers = {"Content-Type": "application/json"}
     logger.debug("Sending to cloud: URL %s, Headers %s, Body %s", url, headers, content)
@@ -136,64 +137,44 @@ def send_to_cloud(content):
     response = conn.getresponse()
     logger.debug("Response Status: %s, Response Reason: %s", response.status, response.reason)
 
-'''
-class SerialThread(threading.Thread):
+class ModbusThread(threading.Thread):
     def __init__(self):
-        super(SerialThread, self).__init__()
-        self.name = "SerialThread"
+        super(ModbusThread, self).__init__()
+        self.name = "ModbusThread"
         self.setDaemon(True)
         self.stop_event = threading.Event()
+        self.client = None
 
 
     def stop(self):
         self.stop_event.set()
+        self.client.close()
 
     def run(self):
         global OUTPUT
-        serial_dev = os.getenv("HOST_DEV1")
-        if serial_dev is None:
-            serial_dev="/dev/ttyS1"
-
-        br = cfg.getint("serial", "baudrate")
-        sdev = serial.Serial(port=serial_dev, baudrate=br)
-        sdev.bytesize = serial.EIGHTBITS #number of bits per bytes
-
-        sdev.parity = serial.PARITY_NONE #set parity check: no parity
-
-        sdev.stopbits = serial.STOPBITS_ONE #number of stop bits
-        sdev.timeout = 5
-        logger.debug("Serial:  %s\n" % sdev)
+        ret = dict()
+ 
+        self.client = ModbusClient('127.0.0.1')
         while True:
             if self.stop_event.is_set():
                 break
-            # get keyboard input
-            # send the character to the device
-            # (note that I happend a \r\n carriage return and line feed to the characters - this is requested by my device)
-            # let's wait one second before reading output (let's give device time to answer)
-            while sdev.inWaiting() > 0:
+            try:
                 try:
-                    sensVal = sdev.read(5000)
-                    try:
-                        recv = json.loads(sensVal)
-                    except ValueError:
-                        logger.debug("Irregular data from Serial port! Simulating the values!")
-                        sdev.flushInput()
-                        sdev.flushOutput()
-                        recv = simulate.simulate()
+                    recv = self.client.read_coils(1,1)
+                except ValueError:
+                    logger.debug("Irregular data from Serial port! Simulating the values!")
 
-                    logger.debug("Received: %s" % str(recv))
-                    sdev.flush()
-                    recv["msg"] = DISPLAY_MSG
-                    OUTPUT = recv
-                    dweet(recv)
-                    send_to_cloud(recv)
-                    time.sleep(2)
-                except Exception as ex:
-                    logger.exception("Exception.. but let us be resilient..")
-                    time.sleep(2)
+                logger.debug("Received coil value from modbus server - %s" % (str(recv.bits[0]))) 
+                ret['coil'] = recv.bits[0]
+                OUTPUT = ret
+                dweet(ret)
+                send_to_cloud(ret)
+                logger.debug("###################################")
+                time.sleep(2)
+            except Exception as ex:
+                logger.exception("Exception.. but let us be resilient..")
+                time.sleep(2)
 
-        sdev.close()
-'''
 
 class HTTPServerThread(threading.Thread):
     """
@@ -237,10 +218,14 @@ if __name__ == '__main__':
     hs = HTTPServerThread(ip, port, app)
     hs.start()
 
+    mc = ModbusThread()
+    mc.start()
+
     def terminate_self():
         logger.info("Stopping the application")
         try:
             hs.stop()
+            mc.stop()
         except Exception as ex:
             logger.exception("Error stopping the app gracefully.")
         logger.info("Killing self..")
