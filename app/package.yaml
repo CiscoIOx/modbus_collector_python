@@ -1,0 +1,32 @@
+descriptor-schema-version: 2.0
+
+info:
+  name: Gateway_Agent
+  description: "Gateway-as-a-Service agent application. Monitors southbound controllers and publishes data to the cloud"
+  version: "2.0"
+  author-link: "http://www.cisco.com"
+  author-name: "Cisco Systems"
+
+app:
+  type: paas
+
+  resources:
+    profile: c1.small
+
+    network:
+      -
+        interface-name: eth0
+        ports:
+            tcp: [9000]
+
+    devices:
+      -
+        type: serial
+        label: HOST_DEV1
+        usage: This is monitoring elevator controller
+
+# Specify runtime and startup
+  startup:
+    runtime: python
+    runtime-version: 2.7
+    target: main.py
