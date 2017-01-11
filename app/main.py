@@ -91,8 +91,8 @@ class WebApp(Bottle):
     def display(self):
         global DISPLAY_MSG
         m = request.json
-        DISPLAY_MSG = m["msg"]
-        return {"msg": DISPLAY_MSG}
+        DISPLAY_MSG = m["coil"]
+        return {"coil": DISPLAY_MSG}
 
     def data(self):
         global OUTPUT
@@ -162,7 +162,7 @@ class ModbusThread(threading.Thread):
                 try:
                     recv = self.client.read_coils(1,1)
                 except ValueError:
-                    logger.debug("Irregular data from Serial port! Simulating the values!")
+                    logger.debug("Irregular data from modbus server!")
 
                 logger.debug("Received coil value from modbus server - %s" % (str(recv.bits[0]))) 
                 ret['coil'] = recv.bits[0]
