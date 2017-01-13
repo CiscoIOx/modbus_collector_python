@@ -156,8 +156,11 @@ class ModbusThread(threading.Thread):
     def run(self):
         global OUTPUT
         ret = dict()
- 
-        self.client = ModbusClient('127.0.0.1', port=5020)
+
+        modbus_server = cfg.get("sensors", "server")
+        modbus_port = int(cfg.get("sensors", "port")) 
+        self.client = ModbusClient(modbus_server, port=modbus_port)
+
         temp_reg = int(cfg.get("sensors", "temperature_reg"),16)
         humid_reg = int(cfg.get("sensors", "humidity_reg"), 16)
         pressure_reg = int(cfg.get("sensors", "pressure_reg"), 16)
