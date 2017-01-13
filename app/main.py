@@ -9,15 +9,17 @@ import re
 import httplib, urllib
 import ssl
 import logging
+import random
+from pymodbus.exceptions import ModbusException
+from pymodbus.constants import Endian
 from pymodbus.client.sync import ModbusTcpClient as ModbusClient
-
+from pymodbus.payload import BinaryPayloadDecoder
 from ConfigParser import SafeConfigParser
-
-logger = logging.getLogger("modbusapp")
-
 from logging.handlers import RotatingFileHandler
 from wsgiref.simple_server import make_server
 from bottle import Bottle, request
+
+logger = logging.getLogger("modbusapp")
 
 def _sleep_handler(signum, frame):
     print "SIGINT Received. Stopping app"
@@ -91,8 +93,8 @@ class WebApp(Bottle):
     def display(self):
         global DISPLAY_MSG
         m = request.json
-        DISPLAY_MSG = m["coil"]
-        return {"coil": DISPLAY_MSG}
+        DISPLAY_MSG = m["msg"]
+        return {"msg": DISPLAY_MSG}
 
     def data(self):
         global OUTPUT
@@ -134,6 +136,7 @@ def send_to_cloud(content):
     headers = {"Content-Type": "application/json"}
     logger.debug("Sending to cloud: URL %s, Headers %s, Body %s", url, headers, content)
     conn.request("POST", url, content, headers)
+    time.sleep(2)
     response = conn.getresponse()
     logger.debug("Response Status: %s, Response Reason: %s", response.status, response.reason)
 
@@ -154,26 +157,64 @@ class ModbusThread(threading.Thread):
         global OUTPUT
         ret = dict()
  
-        self.client = ModbusClient('127.0.0.1')
+        self.client = ModbusClient('127.0.0.1', port=5020)
+        temp_reg = int(cfg.get("sensors", "temperature_reg"),16)
+        humid_reg = int(cfg.get("sensors", "humidity_reg"), 16)
+        pressure_reg = int(cfg.get("sensors", "pressure_reg"), 16)
+        geo_lat_reg = int(cfg.get("sensors", "geo_latitude_reg"), 16)
+        geo_long_reg = int(cfg.get("sensors", "geo_longitude_reg"), 16) 
+        key_op_reg = int(cfg.get("sensors", "key_operation_reg"), 16)
+ 
+        poll_freq = int(cfg.get("sensors", "poll_frequency"))
+
         while True:
             if self.stop_event.is_set():
                 break
             try:
                 try:
-                    recv = self.client.read_coils(1,1)
-                except ValueError:
-                    logger.debug("Irregular data from modbus server!")
+                    # Read all data in a single go
+		    # recv = self.client.read_holding_registers(temp_reg,5)
 
-                logger.debug("Received coil value from modbus server - %s" % (str(recv.bits[0]))) 
-                ret['coil'] = recv.bits[0]
+                    # Read Temperature 
+                    recv = self.client.read_holding_registers(temp_reg,1)
+                    ret['Temperature'] = recv.registers[0]
+
+                    # Read Humidity
+                    recv = self.client.read_holding_registers(humid_reg,1)
+                    ret['Humidity'] = recv.registers[0]
+
+                    # Read Pressure
+                    recv = self.client.read_holding_registers(pressure_reg,1)     
+                    ret['Pressure'] = recv.registers[0]
+
+                    # Read Geo location latitude
+                    recv = self.client.read_holding_registers(geo_lat_reg,2)
+                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Little)
+                    ret['Latitude'] = decoder.decode_32bit_float() 
+ 
+                    # Read Geo location longitude
+                    recv = self.client.read_holding_registers(geo_long_reg,2)
+                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Little)
+                    ret['Longitude'] = decoder.decode_32bit_float()
+ 
+                    # Read keyboard operation
+                    recv = self.client.read_holding_registers(key_op_reg,8)
+                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Little)
+                    raw_str = decoder.decode_string(8)
+                    raw_str_tokens = raw_str.split("\u0000") 
+                    ret['Key'] = raw_str_tokens[0]
+                    
+                except ModbusException:
+                    logger.debug("Failed to retrieve data from modbus server!")
+
                 OUTPUT = ret
                 dweet(ret)
                 send_to_cloud(ret)
                 logger.debug("###################################")
-                time.sleep(2)
+                time.sleep(poll_freq)
             except Exception as ex:
                 logger.exception("Exception.. but let us be resilient..")
-                time.sleep(2)
+                time.sleep(poll_freq)
 
 
 class HTTPServerThread(threading.Thread):

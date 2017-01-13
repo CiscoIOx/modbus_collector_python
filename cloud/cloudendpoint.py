@@ -1,5 +1,5 @@
 import os
-import sys
+import sys, errno
 import json
 import threading
 import time
@@ -25,7 +25,7 @@ class HTTPServerThread(threading.Thread):
         cert = os.path.join(BASEDIR, "ssl.crt")
         key = os.path.join(BASEDIR, "ssl.key")
 
-#        self.httpd.socket = ssl.wrap_socket(self.httpd.socket, certfile=cert, keyfile=key, server_side=True)
+#       self.httpd.socket = ssl.wrap_socket(self.httpd.socket, certfile=cert, keyfile=key, server_side=True)
 
         print "Thread : %s. %s:%s initialized" % (self.name, self.ipaddress, str(self.port))
 
@@ -35,8 +35,16 @@ class HTTPServerThread(threading.Thread):
 
 
     def run(self):
-        print "Thread : %s. Serving on %s:%s" % (self.name, self.ipaddress, str(self.port))
-        self.httpd.serve_forever()
+        try:
+            print "Thread : %s. Serving on %s:%s" % (self.name, self.ipaddress, str(self.port))
+            self.httpd.serve_forever()
+        except socket.error, e:
+            print "socket error"
+        except IOError, e:
+            if e.errno == errno.EPIPE:
+                print "Remote end disconnected"
+            else:
+                print "IO error"
 
 
 DATA = {}
@@ -61,8 +69,17 @@ def simple_app(environ, start_response):
             print "Excpetion: %s" % str(ex)
             msg = 'Exception occurred : %s' % str(ex)
         finally:
-            start_response(status, headers)
-            return msg
+            try:
+                start_response(status, headers)
+                return msg
+            except socket.error, e:
+                print "socket error"
+            except IOError, e:
+                if e.errno == errno.EPIPE:
+                    print "Remote end disconnected"
+                else:
+                    print "IO error"
+
     else:  # GET
         status = '200 OK'
         headers = [('Content-type', 'application/json')]

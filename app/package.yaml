@@ -23,7 +23,7 @@ app:
       -
         type: serial
         label: HOST_DEV1
-        usage: This is monitoring elevator controller
+        usage: This is monitoring Weather and Location
 
 # Specify runtime and startup
   startup:
