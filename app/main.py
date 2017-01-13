@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/Users/sureshsankaran/.venv/modbus_app/bin/python
 import time
 import json
 import signal
@@ -192,20 +192,18 @@ class ModbusThread(threading.Thread):
 
                     # Read Geo location latitude
                     recv = self.client.read_holding_registers(geo_lat_reg,2)
-                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Little)
+                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Big)
                     ret['Latitude'] = decoder.decode_32bit_float() 
  
                     # Read Geo location longitude
                     recv = self.client.read_holding_registers(geo_long_reg,2)
-                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Little)
+                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Big)
                     ret['Longitude'] = decoder.decode_32bit_float()
  
                     # Read keyboard operation
                     recv = self.client.read_holding_registers(key_op_reg,8)
-                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Little)
-                    raw_str = decoder.decode_string(8)
-                    raw_str_tokens = raw_str.split("\u0000") 
-                    ret['Key'] = raw_str_tokens[0]
+                    decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Big)
+                    ret['Key'] = decoder.decode_string(8)
                     
                 except ModbusException:
                     logger.error("Failed to retrieve data from modbus server!")

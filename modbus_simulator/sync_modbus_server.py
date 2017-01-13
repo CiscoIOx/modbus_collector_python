@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/Users/sureshsankaran/.venv/modbus_sim/bin python
 '''
 Pymodbus Synchronous Server Example
 --------------------------------------------------------------------------
@@ -83,7 +83,7 @@ def update_register(context, param):
         address = GEO_LATI_REGISTER
         newvalue = random.uniform(LATI_LO, LATI_HI)
         log.debug("new latitude value = "+str(newvalue))
-        builder = BinaryPayloadBuilder(endian=Endian.Little)
+        builder = BinaryPayloadBuilder(endian=Endian.Big)
         builder.add_32bit_float(newvalue)
         payload = builder.to_registers()
         context.setValues(fn_code, address, payload)
@@ -92,7 +92,7 @@ def update_register(context, param):
         address = GEO_LONGI_REGISTER
         newvalue = random.uniform(LONGI_LO, LONGI_HI)
         log.debug("new longitude value = "+str(newvalue))
-        builder = BinaryPayloadBuilder(endian=Endian.Little)
+        builder = BinaryPayloadBuilder(endian=Endian.Big)
         builder.add_32bit_float(newvalue)
         payload = builder.to_registers()
         context.setValues(fn_code, address,payload)
@@ -105,7 +105,7 @@ def update_register(context, param):
          newvalue = random.choice(operations)
          newvalue = newvalue
          log.debug("new key operation = "+newvalue)
-         builder = BinaryPayloadBuilder(endian=Endian.Little)
+         builder = BinaryPayloadBuilder(endian=Endian.Big)
          builder.add_string(newvalue)
          payload = builder.to_registers()
          context.setValues(fn_code, address, payload)
