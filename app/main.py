@@ -208,7 +208,7 @@ class ModbusThread(threading.Thread):
                     ret['Key'] = raw_str_tokens[0]
                     
                 except ModbusException:
-                    logger.debug("Failed to retrieve data from modbus server!")
+                    logger.error("Failed to retrieve data from modbus server!")
 
                 OUTPUT = ret
                 dweet(ret)
