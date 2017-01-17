@@ -1,4 +1,4 @@
-descriptor-schema-version: 2.0
+descriptor-schema-version: "2.2"
 
 info:
   name: Gateway_Agent
@@ -8,7 +8,8 @@ info:
   author-name: "Cisco Systems"
 
 app:
-  type: paas
+  cpuarch: "x86_64"  
+  type: docker
 
   resources:
     profile: c1.small
@@ -23,10 +24,9 @@ app:
       -
         type: serial
         label: HOST_DEV1
-        usage: This is monitoring Weather and Location
+        usage: App monitors Weather and Location
 
 # Specify runtime and startup
   startup:
-    runtime: python
-    runtime-version: 2.7
-    target: main.py
+    rootfs: rootfs.tar
+    target: ["python", "/usr/bin/main.py"] 
