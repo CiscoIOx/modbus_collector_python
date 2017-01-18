@@ -216,7 +216,7 @@ identity.MajorMinorRevision = '1.0'
 thread = Thread(target=updating_writer, args=(context,))
 thread.start()
 # Tcp:
-StartTcpServer(context, identity=identity, address=("localhost", 5020))
+StartTcpServer(context, identity=identity, address=("0.0.0.0", 5020))
 
 # Udp:
 #StartUdpServer(context, identity=identity, address=("localhost", 502))
