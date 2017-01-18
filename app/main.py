@@ -202,10 +202,12 @@ class ModbusThread(threading.Thread):
                     ret['Longitude'] = decoder.decode_32bit_float()
  
                     # Read keyboard operation
-                    recv = self.client.read_holding_registers(key_op_reg,8)
+                    recv = self.client.read_holding_registers(key_op_reg,6)
                     decoder = BinaryPayloadDecoder.fromRegisters(recv.registers, endian=Endian.Big)
-                    ret['Key'] = decoder.decode_string(8)
-                    
+                    reg_str = decoder.decode_string(6)
+                    str_tokens = reg_str.split("\x00")
+                    ret['Key'] = str_tokens[0]
+                     
                 except ModbusException:
                     logger.error("Failed to retrieve data from modbus server!")
 
