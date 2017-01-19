@@ -38,7 +38,7 @@ OUTPUT = dict()
 # Get hold of the configuration file (package_config.ini)
 moduledir = os.path.abspath(os.path.dirname(__file__))
 BASEDIR = os.getenv("CAF_APP_PATH", moduledir)
-tcfg = os.path.join(BASEDIR, "package_config.ini")
+tcfg = os.path.join(BASEDIR, "project",  "package_config.ini")
 
 CONFIG_FILE = os.getenv("CAF_APP_CONFIG_FILE", tcfg)
 
