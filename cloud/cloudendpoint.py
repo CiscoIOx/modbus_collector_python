@@ -5,6 +5,8 @@ import threading
 import time
 import ssl
 from wsgiref.simple_server import make_server
+from cgi import parse_qs, escape
+
 
 moduledir = os.path.abspath(os.path.dirname(__file__))
 BASEDIR = os.getenv("CAF_APP_PATH", moduledir)
@@ -82,16 +84,19 @@ def simple_app(environ, start_response):
 
     else:  # GET
         status = '200 OK'
+        d = parse_qs(environ['QUERY_STRING'])
+        cb = d.get('callback','')[0]
         headers = [('Content-type', 'application/json')]
         ret = json.dumps(DATA)
+        rval = "%s(%s)" % (cb, ret)
         start_response(status, headers)
-        return ret
+        return rval
 
 if __name__ == '__main__':
     app = simple_app
 
     ip = "0.0.0.0"
-    port = 10000
+    port = 10001
 
     # Setup App Server
 
