@@ -53,6 +53,8 @@ DATA = {}
 
 def simple_app(environ, start_response):
     global DATA
+    payload = {}
+
     if environ['REQUEST_METHOD'] == 'POST':
         status = None
         headers = None
@@ -62,9 +64,10 @@ def simple_app(environ, start_response):
             headers = [('Content-Type', 'text/plain')]
             request_body_size = int(environ.get('CONTENT_LENGTH', 0))
             request_body = environ['wsgi.input'].read(request_body_size)
-            DATA = json.loads(request_body)  # turns the qs to a dict
-            msg = 'From POST: %s' % str(DATA)
+            payload = json.loads(request_body)  # turns the qs to a dict
+            msg = 'From POST: %s' % str(payload)
             print msg 
+            DATA.update(payload)
         except Exception as ex:
             status = '500 OOPS'
             headers = [('Content-Type', 'text/plain')]
