@@ -5,7 +5,19 @@ a cloud visualizer like freeboard.io. This app is built in dockerized developmen
 environment and it follows various development concepts recommended for IOx apps. 
 Complete guide to IOx app development concepts can be found [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
 
-## App development concepts
+## Workflow
+Modbus application (app/main.py) polls the below mentioned data from holding registers
+of modbus slave every few seconds. This data is then sent in JSON format to dweet.io
+and backend web server.
+
+* Temperature (in Celcius)
+* Humidity (in % Relative humidity)
+* Pressure (in kPa)
+* Key operation detected (UP/DOWN/LEFT/RIGHT/SELECT)
+* Location of the device (Latitude and Longitude)
+
+Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py. 
+Backedn web server code can be found at location cloud/cloudendpoint.py.
 
 ### Package Descriptor
 
