@@ -1,4 +1,9 @@
-# Modbus Application to acquire data from modbus gateway and push to a cloud visualizer
+# Modbus Application 
+## Overview
+Modbus application demonstrates how to acquire data from modbus slave and push to 
+a cloud visualizer like freeboard.io. This app is built in dockerized development 
+environment and it follows various development concepts recommended for IOx apps. 
+Complete guide to IOx app development concepts can be found [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
 
 ## App development concepts
 
