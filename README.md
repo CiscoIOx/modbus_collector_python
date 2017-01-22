@@ -118,6 +118,23 @@ limited the size of log file to 1MB and rotate the logs with upto 3 backup log f
 Other recommendations for safeguarding against flash wear can be found [here]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#safeguarding-against-flash-wear)
 
+### Handling signals
+Modbus app handles SIGTERM and SIGINT signals as below. When the application is stopped, CAF sends SIGTERM
+signal to the application. These signal handlers enable us to stop the application gracefully.
+
+```
+def _sleep_handler(signum, frame):
+    print "SIGINT Received. Stopping app"
+    raise KeyboardInterrupt
+    
+def _stop_handler(signum, frame):
+    print "SIGTERM Received. Stopping app"
+    raise KeyboardInterrupt
+    
+signal.signal(signal.SIGTERM, _stop_handler)
+signal.signal(signal.SIGINT, _sleep_handler)
+```
+
 ### Package Descriptor
 
 IOx package descriptor is a file that describes the requirements, metadata about an IOx application or a service.
