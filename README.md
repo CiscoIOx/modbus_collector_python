@@ -135,6 +135,7 @@ signal.signal(signal.SIGTERM, _stop_handler)
 signal.signal(signal.SIGINT, _sleep_handler)
 ```
 ## Creating Docker image
+
 ### Docker file
 Create a docker file with information like base rootfs location, installation steps for python module
 dependencies, the port that needs to be exposed for the application and the command to run the applicaiton.
@@ -153,6 +154,14 @@ RUN pip install bottle
 COPY main.py /usr/bin/main.py
 EXPOSE 9000
 CMD [“python”, “/usr/bin/main.py”]
+```
+More details regarding opkg and cisco hosted docker image can be found [here]
+(https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository)
+
+Now build docker image from this dockerfile and tag it with name modbus_app:1.0.
+
+```
+# docker build -t modbus_app:1.0 .
 ```
 
 ### Package Descriptor
