@@ -1,11 +1,20 @@
 # Modbus Application 
 ## Overview
-Modbus application demonstrates how to acquire data from modbus slave and push to 
+Modbus application demonstrates how to acquire data from modbus slave and push the data to 
 a cloud visualizer like freeboard.io. This app is built in dockerized development 
 environment and it follows various development concepts recommended for IOx apps. 
 Complete guide to IOx app development concepts can be found [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
 
-## Workflow
+Broadly we will cover the following:
+
+* Implementing modbus application in python
+* Creating a docker image with python application
+* Writing package descriptor file
+* Creating an IOx application package from the docker image
+* Deploying and testing on the target platform
+
+## Developing the Application
+### Workflow
 Modbus application (app/main.py) polls the below mentioned data from holding registers
 of modbus slave every few seconds. This data is then sent in JSON format to dweet.io
 and backend web server.
@@ -18,6 +27,13 @@ and backend web server.
 
 Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py. 
 Backedn web server code can be found at location cloud/cloudendpoint.py.
+
+### Bootstrap configuration file
+We can externalize certain variables whose values will need to be configurable at the time of 
+deployment or can be updated while installed on the device. IOx enables this via bootstrap 
+configuration file.  This file should be named '''package_config.ini''' and should be present in 
+the root of the application package. Administration tools (Fog Director, Local Manager, ioxclient) 
+provide ability to modify this file so that the values can be customized to a deployment environment.
 
 ### Package Descriptor
 
