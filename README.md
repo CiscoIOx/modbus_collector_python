@@ -32,9 +32,51 @@ Backedn web server code can be found at location cloud/cloudendpoint.py.
 ### Bootstrap configuration file
 We can externalize certain variables whose values will need to be configurable at the time of 
 deployment or can be updated while installed on the device. IOx enables this via bootstrap 
-configuration file.  This file should be named '''package_config.ini''' and should be present in 
+configuration file.  This file should be named ```package_config.ini``` and should be present in 
 the root of the application package. Administration tools (Fog Director, Local Manager, ioxclient) 
 provide ability to modify this file so that the values can be customized to a deployment environment.
+
+For the modbus application, we have externalized the configuration parameters for modbus slave, dweet,
+cloud backend web server and logging level using bootstrap configuration file. Then we can modify these parameters 
+as applicable during runtime of the application.
+
+```
+File: app/project/package_config_ini
+
+[sensors]
+server: 127.0.0.1
+port: 5020
+poll_frequency: 10
+temperature_reg: 0x01
+humidity_reg:0x02
+pressure_reg:0x03
+geo_latitude_reg:0x04
+geo_longitude_reg:0x06
+key_operation_reg:0x08
+
+[dweet]
+# Set to no to disable it
+enabled: yes
+server: dweet.io
+name: awake-transport
+
+[server]
+port: 9000
+
+[cloud]
+enabled: yes
+server: 127.0.0.1
+url: /
+port: 10001
+method: POST
+scheme: http
+
+[logging]
+# DEBUG:10, INFO: 20, WARNING: 30, ERROR: 40, CRITICAL: 50, NOTSET: 0
+log_level: 10
+# Enable/disable logging to stdout
+console: yes
+```
 
 ### Package Descriptor
 
