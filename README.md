@@ -17,7 +17,8 @@ Broadly we will cover the following:
 ### Workflow
 Modbus application (app/main.py) polls the below mentioned data from holding registers
 of modbus slave every few seconds. This data is then sent in JSON format to dweet.io
-and backend web server.
+and backend web server. Freeboard.io can use this dweet or web server URL
+as the data source to display real-time data on its dashboard
 
 * Temperature (in Celcius)
 * Humidity (in % Relative humidity)
