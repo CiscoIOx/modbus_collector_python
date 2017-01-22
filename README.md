@@ -119,8 +119,8 @@ Other recommendations for safeguarding against flash wear can be found [here]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#safeguarding-against-flash-wear)
 
 ### Handling signals
-Modbus app handles SIGTERM and SIGINT signals as below. When the application is stopped, CAF sends SIGTERM
-signal to the application. These signal handlers enable us to stop the application gracefully.
+Modbus app handles SIGTERM and SIGINT signals as below. When the application is stopped or platform is powering
+down, CAF sends SIGTERM signal to the application. These signal handlers enable us to stop the application gracefully.
 
 ```
 def _sleep_handler(signum, frame):
@@ -133,6 +133,26 @@ def _stop_handler(signum, frame):
     
 signal.signal(signal.SIGTERM, _stop_handler)
 signal.signal(signal.SIGINT, _sleep_handler)
+```
+## Creating Docker image
+### Docker file
+Create a docker file with information like base rootfs location, installation steps for python module
+dependencies, the port that needs to be exposed for the application and the command to run the applicaiton.
+
+```
+FROM devhub-docker.cisco.com/iox-docker/base-x86_64
+RUN opkg update
+RUN opkg install python
+RUN opkg install python-dev
+RUN opkg install python-pip
+RUN opkg install gcc
+RUN opkg install binutils
+RUN pip install pymodbus
+RUN pip install wsgiref
+RUN pip install bottle
+COPY main.py /usr/bin/main.py
+EXPOSE 9000
+CMD [“python”, “/usr/bin/main.py”]
 ```
 
 ### Package Descriptor
