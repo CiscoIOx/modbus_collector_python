@@ -163,25 +163,12 @@ Now build docker image from this dockerfile and tag it with name modbus_app:1.0.
 ```
 # docker build -t modbus_app:1.0 .
 ```
+## Requesting resources
+Modbus application describes its runtime resource requirements in package descriptor file named
+```package.yaml```. Package descriptor file is mandatory for any IOx application.
 
-### Package Descriptor
-
-IOx package descriptor is a file that describes the requirements, metadata about an IOx application or a service.
-
-Every IOx package MUST contain a descriptor file.
-
-More details here: https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/package_descriptor/#iox-package-descriptor
 
 ```
-descriptor-schema-version: "2.2"
-
-info:
-  name: Gateway_Agent
-  description: "Gateway-as-a-Service agent application. Monitors southbound controllers and publishes data to the cloud"
-  version: "2.0"
-  author-link: "http://www.cisco.com"
-  author-name: "Cisco Systems"
-
 app:
   cpuarch: "x86_64"  
   type: docker
@@ -206,6 +193,29 @@ app:
     rootfs: rootfs.tar
     target: ["python", "/usr/bin/main.py"]
 ```
+Here the application requires CPU architecture to be x86_64 and indicates that it is docker
+style application. And the requested profile is c1.small which corresponds to certain
+number of CPU units and memory size. The app also indicates the network interface eth0 will be 
+required with usage of TCP port 9000. At the time of activation, the administrator has to 
+associate eth0 to a specific logical network (ex. iox-nat0). In device requirements section,
+the app is requesting for a serial device and uses the environment variable ```HOST_DEV1``` to
+represent logical name of the device.
+
+This package descriptor files also includes metadata about the application.
+
+```
+descriptor-schema-version: "2.2"
+info:
+  name: Modbus application
+  description: "Modbus app to read weather and location data from the slave and post it to cloud visualizer"
+  version: "1.0"
+  author-link: "http://www.cisco.com"
+  author-name: "Cisco Systems"
+ ```
+
+
+More details here: https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/package_descriptor/#iox-package-descriptor
+
 
 * Resource requirments
  * CPU : some units
