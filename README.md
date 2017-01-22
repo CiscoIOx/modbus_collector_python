@@ -9,7 +9,7 @@ Broadly we will cover the following:
 
 * Implementing modbus application in python
 * Creating a docker image with python application
-* Writing package descriptor file
+* Requesting resources
 * Creating an IOx application package from the docker image
 * Deploying and testing on the target platform
 
@@ -216,4 +216,18 @@ Few things to note for docker style applications.
 * Package descriptor schema version == 2.2 is the minimum version that supports docker style apps.
 * Docker style apps can only run on x86_64 bit machines.
 * rootfs.tar is the name of the file containing the docker image
+
+## Creating an IOx application package
+Create IOx application package from the docker image (modbus_app:1.0) and the package descriptor file (package.yaml).
+From the app/project directory, run below ```ioxclient``` command to create the IOx app package. Detailed info about
+```ioxclient``` can be found [here](https://developer.cisco.com/media/iox-dev-guide-11-28-16/ioxclient/ioxclient-reference/)
+
+```
+$ ioxclient docker package modbus_app:1.0 .
+```
+This command creates `IOx application package named ``package.tar```, which can be deployed on an IOx platform. Refer [here]
+(https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/simple-python/#creating-an-iox-application-package-from-the-docker-image) for
+further details regarding creating an IOx app package.
+
+
 
