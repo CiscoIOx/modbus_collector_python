@@ -105,6 +105,18 @@ writes the logs to the directory indicated by the environment variable ```CAF_AP
 For further details on application logging refer the section [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#application-logging-and-persistent-storage)
 
 ### Safeguarding against flash wear
+Due to constraints of the flash storage like limited PE cycles and susceptible to wear, we have
+limited the size of log file to 1MB and rotate the logs with upto 3 backup log files.
+
+```
+ # Lets cap the file at 1MB and keep 3 backups
+    rfh = RotatingFileHandler(log_file_path, maxBytes=1024*1024, backupCount=3)
+    rfh.setLevel(loglevel)
+    rfh.setFormatter(formatter)
+    logger.addHandler(rfh)
+```
+Other recommendations for safeguarding against flash wear can be found [here]
+(https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#safeguarding-against-flash-wear)
 
 ### Package Descriptor
 
