@@ -11,7 +11,6 @@ Broadly we will cover the following:
 * Creating a docker image with python application
 * Requesting resources
 * Creating an IOx application package from the docker image
-* Deploying and testing on the target platform
 
 ## Developing the Application
 ### Workflow
@@ -137,8 +136,8 @@ signal.signal(signal.SIGINT, _sleep_handler)
 ## Creating Docker image
 
 ### Docker file
-Create a docker file with information like base rootfs location, installation steps for python module
-dependencies, the port that needs to be exposed for the application and the command to run the applicaiton.
+Create a docker file with information like base rootfs location, installation steps for modbus app's python module
+dependencies, the port that needs to be exposed for the application and finally the command to run the applicaiton.
 
 ```
 FROM devhub-docker.cisco.com/iox-docker/base-x86_64
@@ -155,7 +154,7 @@ COPY main.py /usr/bin/main.py
 EXPOSE 9000
 CMD [“python”, “/usr/bin/main.py”]
 ```
-More details regarding opkg and cisco hosted docker image can be found [here]
+We have used cisco hosted docker image for base rootfs. More details regarding opkg and cisco hosted docker image can be found [here.]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository)
 
 Now build docker image from this dockerfile and tag it with name modbus_app:1.0.
@@ -220,12 +219,12 @@ Few things to note for docker style applications.
 ## Creating an IOx application package
 Create IOx application package from the docker image (modbus_app:1.0) and the package descriptor file (package.yaml).
 From the app/project directory, run below ```ioxclient``` command to create the IOx app package. Detailed info about
-```ioxclient``` can be found [here](https://developer.cisco.com/media/iox-dev-guide-11-28-16/ioxclient/ioxclient-reference/)
+```ioxclient``` can be found [here.](https://developer.cisco.com/media/iox-dev-guide-11-28-16/ioxclient/ioxclient-reference/)
 
 ```
 $ ioxclient docker package modbus_app:1.0 .
 ```
-This command creates `IOx application package named ``package.tar```, which can be deployed on an IOx platform. Refer [here]
+This command creates IOx application package named ``package.tar```, which can be deployed on an IOx platform. Refer [here]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/simple-python/#creating-an-iox-application-package-from-the-docker-image) for
 further details regarding creating an IOx app package.
 
