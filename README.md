@@ -77,7 +77,20 @@ log_level: 10
 # Enable/disable logging to stdout
 console: yes
 ```
+### Environment variables
+Cisco App hosting Framework (CAF) in IOx provides a set of environment variables for
+applications. We have utilized ```CAF_APP_PATH``` and ```CAF_APP_CONFIG_FILE``` to obtain 
+absolute path of the app and absolute path of the bootstrap configuration file.
+ 
+```
+# Get hold of the configuration file (package_config.ini)
+moduledir = os.path.abspath(os.path.dirname(__file__))
+BASEDIR = os.getenv("CAF_APP_PATH", moduledir)
 
+tcfg = os.path.join(BASEDIR, "project",  "package_config.ini")
+CONFIG_FILE = os.getenv("CAF_APP_CONFIG_FILE", tcfg)
+```
+We can find the entire list of environment variables provided by CAF [here.](https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#environment-variables)
 ### Package Descriptor
 
 IOx package descriptor is a file that describes the requirements, metadata about an IOx application or a service.
