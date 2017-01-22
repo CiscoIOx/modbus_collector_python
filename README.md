@@ -90,7 +90,22 @@ BASEDIR = os.getenv("CAF_APP_PATH", moduledir)
 tcfg = os.path.join(BASEDIR, "project",  "package_config.ini")
 CONFIG_FILE = os.getenv("CAF_APP_CONFIG_FILE", tcfg)
 ```
-We can find the entire list of environment variables provided by CAF [here.](https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#environment-variables)
+We can find the entire list of environment variables provided by CAF [here.]
+(https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#environment-variables)
+
+### Application logging and persistent storage
+Modbus app uses the persistent logging feature provided by IOx. In order to do that the app
+writes the logs to the directory indicated by the environment variable ```CAF_APP_LOG_DIR```.
+
+```
+    log_file_dir = os.getenv("CAF_APP_LOG_DIR", "/tmp")
+    log_file_path = os.path.join(log_file_dir, "thingtalk.log")
+```
+
+For further details on application logging refer the section [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#application-logging-and-persistent-storage)
+
+### Safeguarding against flash wear
+
 ### Package Descriptor
 
 IOx package descriptor is a file that describes the requirements, metadata about an IOx application or a service.
