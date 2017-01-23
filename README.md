@@ -141,7 +141,7 @@ signal.signal(signal.SIGINT, _sleep_handler)
 ## Creating Docker image
 
 ### Docker file
-Create a docker file with information like base rootfs location, installation steps for modbus app's python module
+Create a docker file with information like base rootfs location, modbus app's python module
 dependencies, the port that needs to be exposed for the application and finally the command to run the applicaiton.
 
 ```
