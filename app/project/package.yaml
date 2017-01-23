@@ -1,9 +1,9 @@
 descriptor-schema-version: "2.2"
 
 info:
-  name: Gateway_Agent
-  description: "Gateway-as-a-Service agent application. Monitors southbound controllers and publishes data to the cloud"
-  version: "2.0"
+  name: Modbus application
+  description: "Modbus app to read weather and location data from the slave and post it to cloud visualizer"
+  version: "1.0"
   author-link: "http://www.cisco.com"
   author-name: "Cisco Systems"
 
