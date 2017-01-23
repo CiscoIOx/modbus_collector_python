@@ -278,9 +278,13 @@ to confirm the allocation of the resources.
 
 ## Start/Stop the app
 In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
+![Start app](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_Start_app.png)
 
 ## Troubleshooting the app
 ### Viewing application logs
-In LM, click ```manage``` action corresponding to the application and 
+In LM, click ```manage``` action corresponding to the application and select the ```Logs``` tab. Here we can download the application
+log file.
+![Troubleshoot](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot.png)
+![Manage section](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot_manage.png)
 ### Connecting to the app console
 
