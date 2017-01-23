@@ -20,12 +20,6 @@ app:
         ports:
             tcp: [9000]
 
-    devices:
-      -
-        type: serial
-        label: HOST_DEV1
-        usage: App monitors Weather and Location
-
 # Specify runtime and startup
   startup:
     rootfs: rootfs.tar
