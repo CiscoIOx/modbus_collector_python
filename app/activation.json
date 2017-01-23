@@ -1,7 +1,6 @@
 {
 	"resources": {
 		"profile": "c1.small",
-		"network": [{"interface-name": "eth0", "network-name": "iox-bridge0"}],
-		"devices": [{"type": "serial", "label": "HOST_DEV1", "device-id": "/dev/tnt0"}]
+		"network": [{"interface-name": "eth0", "network-name": "iox-bridge0"}]
 	}
 }
