@@ -264,5 +264,18 @@ Now deploy the application on the platform (for eg., IR829) using the command
 
 ``` $ ioxclient application install modbus_app ./package.tar ```
 
+## Activating the appliation
+Access the local manager (LM) of IOx from http://<IOx platform IP address>:<IOx platform port number>.
+
+``` For example,
+http://172.27.89.2:8443
+```
+Now you would see that application ```modbus_app``` has been deployed on the device. Then click ```activate```
+action link corresponding to the app. This will bring up the resouces page where we can finalize the
+resources like profile, serial access, network config that will be alloted to the application. Press ```activate``` button
+to confirm the allocation of the resources.
+
+![Activation](/Users/sureshsankaran/Desktop/Local manager - App Activation.png)
+
 
 
