@@ -37,7 +37,12 @@ provide ability to modify this file so that the values can be customized to a de
 
 For the modbus application, we have externalized the configuration parameters for modbus slave, dweet,
 cloud backend web server and logging level using bootstrap configuration file. Then we can modify these parameters 
-as applicable during runtime of the application.
+as applicable during runtime of the application. 
+
+Modbus slave simulator's IP address, port number, frequency to update the data, holding register addresses for 
+weather and location attributes are externalized as seen in the snippet below. Also we have provided a handle in
+bootstrap configuration to enable or disable modbus app from sending data to dweet.io and backend web server.
+Logging level of the modbus app has been set to 10 in ```package_config_ini```.
 
 ```
 File: app/project/package_config_ini
