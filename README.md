@@ -274,7 +274,7 @@ action link corresponding to the app. This will bring up the resouces page where
 resources like profile, serial access, network config that will be alloted to the application. Press ```activate``` button
 to confirm the allocation of the resources.
 
-![Activation](images/Local manager - App Activation.png)
+![Activation](http://gitlab.cisco.com/iox/modbus_app/blob/master/images/Local%20manager%20-%20App%20Activation.png)
 
 
 
