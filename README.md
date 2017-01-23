@@ -11,6 +11,11 @@ Broadly we will cover the following:
 * Creating a docker image with python application
 * Requesting resources
 * Creating an IOx application package from the docker image
+* Deploying the applicaiton
+* Activating the appliation
+* Starting the app
+* Stopping the app
+* Troubleshooting the app
 
 ## Developing the Application
 ### Workflow
@@ -141,7 +146,7 @@ signal.signal(signal.SIGINT, _sleep_handler)
 ## Creating Docker image
 
 ### Docker file
-Create a docker file with information like base rootfs location, installation steps for modbus app's python module
+Create a docker file with information like base rootfs location, modbus app's python module
 dependencies, the port that needs to be exposed for the application and finally the command to run the applicaiton.
 
 ```
@@ -159,8 +164,11 @@ COPY main.py /usr/bin/main.py
 EXPOSE 9000
 CMD [“python”, “/usr/bin/main.py”]
 ```
-We have used cisco hosted docker image for base rootfs. More details regarding opkg and cisco hosted docker image can be found [here.]
+* We have used cisco hosted docker image for base rootfs. 
+* More details regarding opkg and cisco hosted docker image can be found [here.]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository)
+* List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
+(http://engci-maven.cisco.com/artifactory/webapp/#/artifacts/browse/simple/General/IOx-Opkg-dev)
 
 Now build docker image from this dockerfile and tag it with name modbus_app:1.0.
 
@@ -232,6 +240,41 @@ $ ioxclient docker package modbus_app:1.0 .
 This command creates IOx application package named ``package.tar```, which can be deployed on an IOx platform. Refer [here]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/simple-python/#creating-an-iox-application-package-from-the-docker-image) for
 further details regarding creating an IOx app package.
+
+## Deploying the applicaiton
+Before installing the app, setup ```ioxclient profile``` using below command and update the platform related parameters like 
+name, IP address, port and authentication details.
+
+```
+$ ioxclient  profiles create
+Active Profile :  default
+Enter a name for this profile : h829
+Your IOx platform's IP address[127.0.0.1] : <IOx device IP>
+Your IOx platform's port number[8443] : <IOx Port Number>
+Authorized user name[root] : cisco
+Password for cisco :
+Local repository path on IOx platform[/software/downloads]:
+URL Scheme (http/https) [https]:
+API Prefix[/iox/api/v2/hosting/]:
+Your IOx platform's SSH Port[2222]: 2022
+Activating Profile h829
+```
+
+Now deploy the application on the platform (for eg., IR829) using the command
+
+``` $ ioxclient application install modbus_app ./package.tar ```
+
+## Activating the appliation
+Access the local manager (LM) of IOx from http://IOx platform IP address:IOx platform port number.
+
+``` For example - http://172.27.89.2:8443 ```
+
+Now you would see in LM that the application ```modbus_app``` has been deployed on the device. Then click ```activate```
+action link corresponding to the app. This will bring up the resouces page where we can finalize the
+resources like profile, serial access, network config that will be alloted to the application. Press ```activate``` button
+to confirm the allocation of the resources.
+
+![Activation](/Users/sureshsankaran/Desktop/Local manager - App Activation.png)
 
 
 
