@@ -267,7 +267,7 @@ Now deploy the application on the platform (for eg., IR829) using the command
 Access the local manager (LM) of IOx from a browser at ```http://IOx platform IP address:IOx platform port number```.
 
 ``` For example - http://172.27.89.2:8443 ```
-[!Local Manager](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Local%20manager.png)
+![Local Manager](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Local%20manager.png)
 
 Now you would see in LM that the application named ```modbus_app``` has been deployed on the device. Then click ```activate```
 action link corresponding to the app. This will bring up the resouces page where we can finalize the
@@ -279,5 +279,8 @@ to confirm the allocation of the resources.
 ## Start/Stop the app
 In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
 
-
+## Troubleshooting the app
+### Viewing application logs
+In LM, click ```manage``` action corresponding to the application and 
+### Connecting to the app console
 
