@@ -169,11 +169,14 @@ CMD [“python”, “/usr/bin/main.py”]
 * List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
 (http://engci-maven.cisco.com/artifactory/webapp/#/artifacts/browse/simple/General/IOx-Opkg-dev)
 
-Now build docker image from this dockerfile and tag it with name modbus_app:1.0.
+Now build the docker image from this dockerfile and tag it with name modbus_app:1.0.
 
 ```
 # docker build -t modbus_app:1.0 .
 ```
+
+If the command fails due to permission denied, try again by prefixing with ```sudo```.
+
 ## Requesting resources
 Modbus application describes its runtime resource requirements in package descriptor file named
 ```package.yaml```. Package descriptor file is mandatory for any IOx application.
@@ -193,12 +196,6 @@ app:
         ports:
             tcp: [9000]
 
-    devices:
-      -
-        type: serial
-        label: HOST_DEV1
-        usage: App monitors Weather and Location
-
 # Specify runtime and startup
   startup:
     rootfs: rootfs.tar
@@ -208,9 +205,7 @@ Here the application requires CPU architecture to be x86_64 and indicates that i
 style application. And the requested profile is c1.small which corresponds to certain
 number of CPU units and memory size. The app also indicates the network interface eth0 will be 
 required with usage of TCP port 9000. At the time of activation, the administrator has to 
-associate eth0 to a specific logical network (ex. iox-nat0). In device requirements section,
-the app is requesting for a serial device and uses the environment variable ```HOST_DEV1``` to
-represent logical name of the device.
+associate eth0 to a specific logical network (ex. iox-nat0).
 
 This package descriptor files also includes metadata about the application.
 
@@ -236,6 +231,8 @@ From the app/project directory, run below ```ioxclient``` command to create the 
 ```
 $ ioxclient docker package modbus_app:1.0 .
 ```
+If the command fails due to permission denied, try again by prefixing with ```sudo```.
+
 This command creates IOx application package named ``package.tar```, which can be deployed on an IOx platform. Refer [here]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/simple-python/#creating-an-iox-application-package-from-the-docker-image) for
 further details regarding creating an IOx app package.
@@ -263,7 +260,14 @@ Now deploy the application on the platform (for eg., IR829) using the command
 
 ``` $ ioxclient application install modbus_app ./package.tar ```
 
-## Activating the appliation
+## Managing the appliation
+IOx application can be managed via ioxclient, Local Manager or Fog Director. We will discuss
+ioxclient and local manager approaches below.
+
+### Activating the app
+#### ioxclient
+
+#### Local Manager
 Access the local manager (LM) of IOx from a browser at ```http://IOx platform IP address:IOx platform port number```.
 
 ``` For example - http://172.27.89.2:8443 ```
@@ -287,4 +291,15 @@ log file.
 ![Troubleshoot](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot.png)
 ![Manage section](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot_manage.png)
 ### Connecting to the app console
+We can connect to the application console using below ioxclient command.
+
+```$ ioxclient application console modbus_app```
+
+Refer [application management section](https://developer.cisco.com/media/iox-dev-guide-11-28-16/ioxclient/ioxclient-reference/#application-management) in devnet for more details.
+
+### Debugging error scenario
+Lets take an example on how to debug an error scenario. Lets have invalid backend server port configured in
+bootstrap configuration file. This will cause the modbus app to not able to connect to the server for sending
+weather and location data. We can connect to the application console and debug the issue with observerd console 
+error messages. Also we can checkout the application log files for further sequence of events.
 
