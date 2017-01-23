@@ -274,7 +274,7 @@ action link corresponding to the app. This will bring up the resouces page where
 resources like profile, serial access, network config that will be alloted to the application. Press ```activate``` button
 to confirm the allocation of the resources.
 
-![Activation](/Users/sureshsankaran/Desktop/Local manager - App Activation.png)
+![Activation](images/Local manager - App Activation.png)
 
 
 
