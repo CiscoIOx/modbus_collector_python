@@ -169,11 +169,14 @@ CMD [“python”, “/usr/bin/main.py”]
 * List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
 (http://engci-maven.cisco.com/artifactory/webapp/#/artifacts/browse/simple/General/IOx-Opkg-dev)
 
-Now build docker image from this dockerfile and tag it with name modbus_app:1.0.
+Now build the docker image from this dockerfile and tag it with name modbus_app:1.0.
 
 ```
 # docker build -t modbus_app:1.0 .
 ```
+
+If the command fails due to permission denied, try again by prefixing with ```sudo```.
+
 ## Requesting resources
 Modbus application describes its runtime resource requirements in package descriptor file named
 ```package.yaml```. Package descriptor file is mandatory for any IOx application.
@@ -236,6 +239,8 @@ From the app/project directory, run below ```ioxclient``` command to create the 
 ```
 $ ioxclient docker package modbus_app:1.0 .
 ```
+If the command fails due to permission denied, try again by prefixing with ```sudo```.
+
 This command creates IOx application package named ``package.tar```, which can be deployed on an IOx platform. Refer [here]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/simple-python/#creating-an-iox-application-package-from-the-docker-image) for
 further details regarding creating an IOx app package.
@@ -287,4 +292,15 @@ log file.
 ![Troubleshoot](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot.png)
 ![Manage section](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot_manage.png)
 ### Connecting to the app console
+We can connect to the application console using below ioxclient command.
+
+```$ ioxclient application console modbus_app```
+
+Refer [application management section](https://developer.cisco.com/media/iox-dev-guide-11-28-16/ioxclient/ioxclient-reference/#application-management) in devnet for more details.
+
+### Debugging error scenario
+Lets take an example on how to debug an error scenario. Lets have invalid backend server port configured in
+bootstrap configuration file. This will cause the modbus app to not able to connect to the server for sending
+weather and location data. We can connect to the application console and debug the issue with observerd console 
+error messages. Also we can checkout the application log files for further sequence of events.
 
