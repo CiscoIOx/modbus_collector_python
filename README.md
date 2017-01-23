@@ -280,6 +280,10 @@ to confirm the allocation of the resources.
 
 ![Activation](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Local%20manager%20-%20App%20Activation.png)
 
+### Update application bootstrap config
+Now that we have activate the application, we need to update the bootstrap config file to make sure that app polls from
+correct modbus slave, posts the data in correct dweet name and to the correct backend server.
+
 ## Start/Stop the app
 In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
 ![Start app](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_Start_app.png)
