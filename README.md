@@ -196,12 +196,6 @@ app:
         ports:
             tcp: [9000]
 
-    devices:
-      -
-        type: serial
-        label: HOST_DEV1
-        usage: App monitors Weather and Location
-
 # Specify runtime and startup
   startup:
     rootfs: rootfs.tar
@@ -211,9 +205,7 @@ Here the application requires CPU architecture to be x86_64 and indicates that i
 style application. And the requested profile is c1.small which corresponds to certain
 number of CPU units and memory size. The app also indicates the network interface eth0 will be 
 required with usage of TCP port 9000. At the time of activation, the administrator has to 
-associate eth0 to a specific logical network (ex. iox-nat0). In device requirements section,
-the app is requesting for a serial device and uses the environment variable ```HOST_DEV1``` to
-represent logical name of the device.
+associate eth0 to a specific logical network (ex. iox-nat0).
 
 This package descriptor files also includes metadata about the application.
 
@@ -268,7 +260,14 @@ Now deploy the application on the platform (for eg., IR829) using the command
 
 ``` $ ioxclient application install modbus_app ./package.tar ```
 
-## Activating the appliation
+## Managing the appliation
+IOx application can be managed via ioxclient, Local Manager or Fog Director. We will discuss
+ioxclient and local manager approaches below.
+
+### Activating the app
+#### ioxclient
+
+#### Local Manager
 Access the local manager (LM) of IOx from a browser at ```http://IOx platform IP address:IOx platform port number```.
 
 ``` For example - http://172.27.89.2:8443 ```
