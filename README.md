@@ -159,8 +159,11 @@ COPY main.py /usr/bin/main.py
 EXPOSE 9000
 CMD [“python”, “/usr/bin/main.py”]
 ```
-We have used cisco hosted docker image for base rootfs. More details regarding opkg and cisco hosted docker image can be found [here.]
+* We have used cisco hosted docker image for base rootfs. 
+* More details regarding opkg and cisco hosted docker image can be found [here.]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository)
+* List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
+(http://engci-maven.cisco.com/artifactory/webapp/#/artifacts/browse/simple/General/IOx-Opkg-dev)
 
 Now build docker image from this dockerfile and tag it with name modbus_app:1.0.
 
