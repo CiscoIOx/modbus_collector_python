@@ -13,8 +13,7 @@ Broadly we will cover the following:
 * Creating an IOx application package from the docker image
 * Deploying the applicaiton
 * Activating the appliation
-* Starting the app
-* Stopping the app
+* Start/Stop the app
 * Troubleshooting the app
 
 ## Developing the Application
@@ -274,7 +273,10 @@ action link corresponding to the app. This will bring up the resouces page where
 resources like profile, serial access, network config that will be alloted to the application. Press ```activate``` button
 to confirm the allocation of the resources.
 
-![Activation](http://gitlab.cisco.com/iox/modbus_app/blob/master/images/Local%20manager%20-%20App%20Activation.png)
+![Activation](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Local%20manager%20-%20App%20Activation.png)
+
+## Start/Stop the app
+In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
 
 
 
