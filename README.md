@@ -260,12 +260,27 @@ Now deploy the application on the platform (for eg., IR829) using the command
 
 ``` $ ioxclient application install modbus_app ./package.tar ```
 
-## Managing the appliation
+## Managing the application
 IOx application can be managed via ioxclient, Local Manager or Fog Director. We will discuss
 ioxclient and local manager approaches below.
 
 ### Activating the app
 #### ioxclient
+Create the ```activation.json``` with final resources that will be allocated for the application.
+
+```
+{
+	"resources": {
+		"profile": "c1.small",
+		"network": [{"interface-name": "eth0", "network-name": "iox-bridge0"}]
+	}
+}
+```
+
+Use below ```ioxclient``` command to activate the application.
+```
+$ ioxclient application activate modbus_app --payload activation.json
+```
 
 #### Local Manager
 Access the local manager (LM) of IOx from a browser at ```http://IOx platform IP address:IOx platform port number```.
@@ -275,14 +290,37 @@ Access the local manager (LM) of IOx from a browser at ```http://IOx platform IP
 
 Now you would see in LM that the application named ```modbus_app``` has been deployed on the device. Then click ```activate```
 action link corresponding to the app. This will bring up the resouces page where we can finalize the
-resources like profile, serial access, network config that will be alloted to the application. Press ```activate``` button
+resources like profile and network config that will be alloted to the application. Press ```activate``` button
 to confirm the allocation of the resources.
 
 ![Activation](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Local%20manager%20-%20App%20Activation.png)
 
 ### Update application bootstrap config
-Now that we have activate the application, we need to update the bootstrap config file to make sure that app polls from
+Now that we have activated the application, we need to update the bootstrap config file to make sure that application polls from
 correct modbus slave, posts the data in correct dweet name and to the correct backend server.
+
+Update rapsberry pi's IP address.
+```
+[sensors]
+server: 127.0.0.1
+port: 5020
+```
+
+Update the dweet name corresponding to your table name.
+```
+[dweet]
+# Set to no to disable it
+enabled: yes
+server: dweet.io
+name: awake-transport
+```
+
+Update the backend web server IP address.
+```
+[cloud]
+enabled: yes
+server: 127.0.0.1
+```
 
 ## Start/Stop the app
 In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
