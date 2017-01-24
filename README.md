@@ -29,7 +29,8 @@ as the data source to display real-time data on its dashboard
 * Key operation detected (UP/DOWN/LEFT/RIGHT/SELECT)
 * Location of the device (Latitude and Longitude)
 
-Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py. 
+Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py.. 
+The same simulator is located on raspberry pi at /home/pi/modbus_simulator/sync_modbus_server.py.
 Backedn web server code can be found at location cloud/cloudendpoint.py.
 
 ### Bootstrap configuration file
@@ -53,7 +54,7 @@ File: app/project/package_config_ini
 
 [sensors]
 server: 127.0.0.1
-port: 5020
+port: 502
 poll_frequency: 10
 temperature_reg: 0x01
 humidity_reg:0x02
@@ -303,7 +304,7 @@ Update rapsberry pi's IP address.
 ```
 [sensors]
 server: 127.0.0.1
-port: 5020
+port: 502
 ```
 
 Update the dweet name corresponding to your table name.
