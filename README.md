@@ -30,7 +30,7 @@ as the data source to display real-time data on its dashboard
 * Location of the device (Latitude and Longitude)
 
 Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py.. 
-The same simulator is located on raspberry pi at /home/pi/modbus_simulator/sync_modbus_server.py.
+The same simulator is located on ```raspberry pi at /home/pi/modbus_simulator/sync_modbus_server.py```.
 Backedn web server code can be found at location cloud/cloudendpoint.py.
 
 ### Bootstrap configuration file
