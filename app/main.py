@@ -68,7 +68,7 @@ def setup_logging(cfg):
 
     # The default is to use a Rotating File Handler
     log_file_dir = os.getenv("CAF_APP_LOG_DIR", "/tmp")
-    log_file_path = os.path.join(log_file_dir, "thingtalk.log")
+    log_file_path = os.path.join(log_file_dir, "modbus_app.log")
 
     # Lets cap the file at 1MB and keep 3 backups
     rfh = RotatingFileHandler(log_file_path, maxBytes=1024*1024, backupCount=3)
