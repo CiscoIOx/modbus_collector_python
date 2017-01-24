@@ -109,7 +109,7 @@ def dweet(content):
     dweet_server = cfg.get("dweet","server")
     dweet_name = cfg.get("dweet", "name")
     logger.debug("Connecting to https://%s", dweet_server)
-    conn = httplib.HTTPSConnection(dweet_server)
+    conn = httplib.HTTPSConnection(dweet_server, timeout=10)
     #params = urllib.urlencode(content)
     url = "/dweet/for/%s" % (dweet_name)
     logger.debug("Dweeting: %s", url)
@@ -132,7 +132,7 @@ def send_to_cloud(content):
     scheme = cfg.get("cloud", "scheme")
     logger.debug("Connecting to https://%s:%s", server, port)
 
-    conn = httplib.HTTPConnection(server, port)
+    conn = httplib.HTTPConnection(server, port, timeout=10)
     content = json.dumps(content)
     headers = {"Content-Type": "application/json"}
     logger.debug("Sending to cloud: URL %s, Headers %s, Body %s", url, headers, content)
