@@ -324,6 +324,11 @@ server: 127.0.0.1
 ```
 
 ## Start/Stop the app
+Use below ```ioxclient``` command to start the application.
+```
+ioxclient app start modbus_app
+```
+
 In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
 ![Start app](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_Start_app.png)
 
@@ -341,7 +346,7 @@ We can connect to the application console using below ioxclient command.
 Refer [application management section](https://developer.cisco.com/media/iox-dev-guide-11-28-16/ioxclient/ioxclient-reference/#application-management) in devnet for more details.
 
 ### Debugging error scenario
-Lets take an example on how to debug an error scenario. Lets have invalid backend server port configured in
+Lets take an example on how to debug an error scenario. If, for some reason, we have invalid backend server port configured in
 bootstrap configuration file. This will cause the modbus app to not able to connect to the server for sending
 weather and location data. We can connect to the application console and debug the issue with observerd console 
 error messages. Also we can checkout the application log files for further sequence of events.
