@@ -322,6 +322,58 @@ Update the backend web server IP address.
 enabled: yes
 server: 127.0.0.1
 ```
+## NAT configuration on IOS
+We have also built a REST URL end point listening on port 9000 in the modbus application for dumping the weather and location data in JSON format at any point
+in time. 
+
+Bootstrap configuration of port in ```package_config_ini``` file.
+```
+[server]
+port: 9000
+```
+
+Before accessing the REST endpoint, we need to setup the NAT configuration on IOS to open up the port 9000 to external world. This can be done using the command
+```
+IR829#show iox host list detail 
+
+IOX Server is running. Process ID: 325
+Count of hosts registered: 1
+
+Host registered:
+===============
+    IOX Server Address: FE80::242:68FF:FEFB:E78C; Port: 22222
+
+    Link Local Address of Host: FE80::1FF:FE90:8B05
+    IPV4 Address of Host:       192.168.1.6
+    IPV6 Address of Host:       fe80::1ff:fe90:8b05
+    Client Version:             0.4
+    Session ID:                 2
+    OS Nodename:                IR829-GOS-1
+    Host Hardware Vendor:       Cisco Systems, Inc.
+    Host Hardware Version:      1.0
+    Host Card Type:             not implemented
+    Host OS Version:            1.2.4.2
+    OS status:                  RUNNING
+
+    Interface Hardware Vendor:  None
+    Interface Hardware Version: None
+    Interface Card Type:        None
+
+    Applications Registered:
+    =======================
+	Count of applications registered by this host: 0
+
+IR829#conf t
+IR829(config)#ip nat inside source static tcp 192.168.1.6 9000 interface Vlan1 9000
+IR829(config)#
+
+```
+JSON data can be accessed using the URL
+
+```
+https://IR829_PUBLIC_IP_ADDRESS:9000
+```
+
 
 ## Start/Stop the app
 Use below ```ioxclient``` command to start the application.
