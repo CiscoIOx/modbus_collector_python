@@ -21,9 +21,11 @@ from pymodbus.datastore import ModbusSlaveContext, ModbusServerContext
 from pymodbus.constants import Endian
 from pymodbus.payload import BinaryPayloadBuilder
 from pymodbus.transaction import ModbusRtuFramer,ModbusAsciiFramer
-from threading import Thread
+import threading
 import time
 import random
+import signal
+import os
 
 UPDATE_FREQUENCY=10
 
@@ -51,8 +53,19 @@ LATI_HI=13.20
 LONGI_LO=77.59
 LONGI_HI=79.26
 
+#-----------#
+# setup signal handling
+#----------#
+def _sleep_handler(signum, frame):
+    print "SIGINT Received. Stopping simulator"
+    raise KeyboardInterrupt
 
+def _stop_handler(signum, frame):
+    print "SIGTERM Received. Stopping simulator"
+    raise KeyboardInterrupt
 
+signal.signal(signal.SIGTERM, _stop_handler)
+signal.signal(signal.SIGINT, _sleep_handler)
 #---------------------------------------------------------------------------# 
 # configure the service logging
 #---------------------------------------------------------------------------# 
@@ -118,23 +131,36 @@ def update_register(context, param):
 #---------------------------------------------------------------------------# 
 # define your callback process
 #---------------------------------------------------------------------------# 
-def updating_writer(a):
-    ''' A worker process that runs every so often and
-    updates live values of the context. It should be noted
-    that there is a race condition for the update.
+class UpdateRegisters(threading.Thread):
+    def __init__(self, context):
+        super(UpdateRegisters, self).__init__()
+        self.name = "ModbusSimulatorThread"
+        self.setDaemon(True)
+        self.inp_context = context
+        self.stop_event = threading.Event()
 
-    :param arguments: The input arguments to the call
-    '''
-    while 1:
-        log.debug("updating the context")
-        context = a[0]
-        update_register(context, "temperature")
-        update_register(context, "humidity")
-        update_register(context, "pressure")
-        update_register(context, "geolati")
-        update_register(context, "geolongi")
-        update_register(context, "keyop")
-        time.sleep(UPDATE_FREQUENCY)
+    def stop(self):
+        self.stop_event.set()
+
+    def run(self):
+        ''' A worker process that runs every so often and
+        updates live values of the context. It should be noted
+        that there is a race condition for the update.
+        :param arguments: The input arguments to the call
+        '''
+        while True:
+            if self.stop_event.is_set():
+                break
+
+            log.debug("updating the context")
+            context = self.inp_context[0]
+            update_register(context, "temperature")
+            update_register(context, "humidity")
+            update_register(context, "pressure")
+            update_register(context, "geolati")
+            update_register(context, "geolongi")
+            update_register(context, "keyop")
+            time.sleep(UPDATE_FREQUENCY)
 
 
 #---------------------------------------------------------------------------# 
@@ -213,10 +239,27 @@ identity.MajorMinorRevision = '1.0'
 #---------------------------------------------------------------------------# 
 # run the server you want
 #---------------------------------------------------------------------------# 
-thread = Thread(target=updating_writer, args=(context,))
-thread.start()
-# Tcp:
-StartTcpServer(context, identity=identity, address=("0.0.0.0", 502))
+if __name__ == '__main__':
+    update_reg = UpdateRegisters(context)
+    update_reg.start()
+
+    def terminate_self():
+        log.info("Stopping the simulator")
+        try:
+            update_reg.stop()
+        except:
+            log.exception("Error stopping the simulator gracefully.")
+        log.info("Killing self..")
+        os.kill(os.getpid(), 9)
+
+    try:
+        # Tcp:
+        StartTcpServer(context, identity=identity, address=("0.0.0.0", 502))
+    except KeyboardInterrupt:
+        terminate_self()
+    except Exception as ex:
+        log.exception("Caught exception! Terminating..")
+        terminate_self()
 
 # Udp:
 #StartUdpServer(context, identity=identity, address=("localhost", 502))
