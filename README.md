@@ -322,11 +322,11 @@ Update the backend web server IP address.
 enabled: yes
 server: 127.0.0.1
 ```
-## NAT configuration on IOS [optional]
-We have also built a REST URL end point listening on port 9000 in the modbus application for dumping the weather and location data in JSON format at point
+## NAT configuration on IOS
+We have also built a REST URL end point listening on port 9000 in the modbus application for dumping the weather and location data in JSON format at any point
 in time. 
 
-In ```package_config_ini```
+Bootstrap configuration of port in ```package_config_ini``` file.
 ```
 [server]
 port: 9000
