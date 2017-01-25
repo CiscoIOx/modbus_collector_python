@@ -17,7 +17,6 @@ Complete guide to IOx app development concepts can be found [here] (https://deve
       - [Handling signals](#handling-signals)
   - [Creating Docker image](#creating-docker-image)
       - [Docker file](#docker-file)
-      - [Build the image](#build-the-image)
   - [Requesting resources](#requesting-resources)
   - [Creating an IOx application package](#creating-an-iox-application-package)
   - [Deploying the applicaiton](#deploying-the-applicaiton)
