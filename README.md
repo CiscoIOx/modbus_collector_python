@@ -409,7 +409,7 @@ In local manager, we can start/stop the application by pressing action link ```s
 ## Troubleshooting the app
 ### Viewing application logs
 In LM, click ```manage``` action corresponding to the application and select the ```Logs``` tab. Here we can download the application
-log file.
+log file ```modbus_app.log```.
 ![Troubleshoot](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot.png)
 ![Manage section](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot_manage.png)
 ### Connecting to the app console
