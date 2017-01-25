@@ -1,39 +1,3 @@
-<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
-
-- [Modbus Application](#modbus-application)
-	- [Overview](#overview)
-	- [Developing the Application](#developing-the-application)
-		- [Workflow](#workflow)
-		- [Bootstrap configuration file](#bootstrap-configuration-file)
-- [Set to no to disable it](#set-to-no-to-disable-it)
-- [DEBUG:10, INFO: 20, WARNING: 30, ERROR: 40, CRITICAL: 50, NOTSET: 0](#debug10-info-20-warning-30-error-40-critical-50-notset-0)
-- [Enable/disable logging to stdout](#enabledisable-logging-to-stdout)
-		- [Environment variables](#environment-variables)
-- [Get hold of the configuration file (package_config.ini)](#get-hold-of-the-configuration-file-packageconfigini)
-		- [Application logging and persistent storage](#application-logging-and-persistent-storage)
-		- [Safeguarding against flash wear](#safeguarding-against-flash-wear)
-		- [Handling signals](#handling-signals)
-	- [Creating Docker image](#creating-docker-image)
-		- [Docker file](#docker-file)
-- [docker build -t modbus_app:1.0 .](#docker-build-t-modbusapp10-)
-	- [Requesting resources](#requesting-resources)
-- [Specify runtime and startup](#specify-runtime-and-startup)
-	- [Creating an IOx application package](#creating-an-iox-application-package)
-	- [Deploying the applicaiton](#deploying-the-applicaiton)
-	- [Managing the application](#managing-the-application)
-		- [Activating the app](#activating-the-app)
-			- [ioxclient](#ioxclient)
-			- [Local Manager](#local-manager)
-		- [Update application bootstrap config](#update-application-bootstrap-config)
-- [Set to no to disable it](#set-to-no-to-disable-it)
-	- [NAT configuration on IOS](#nat-configuration-on-ios)
-	- [Start/Stop the app](#startstop-the-app)
-	- [Troubleshooting the app](#troubleshooting-the-app)
-		- [Viewing application logs](#viewing-application-logs)
-		- [Connecting to the app console](#connecting-to-the-app-console)
-		- [Debugging error scenario](#debugging-error-scenario)
-
-<!-- /TOC -->
 # Modbus Application
 ## Overview
 Modbus application demonstrates how to acquire data from modbus slave and push the data to
