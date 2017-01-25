@@ -17,6 +17,7 @@ Complete guide to IOx app development concepts can be found [here] (https://deve
       - [Handling signals](#handling-signals)
   - [Creating Docker image](#creating-docker-image)
       - [Docker file](#docker-file)
+      - [Build the image](#build-the-image)
   - [Requesting resources](#requesting-resources)
   - [Creating an IOx application package](#creating-an-iox-application-package)
   - [Deploying the applicaiton](#deploying-the-applicaiton)
@@ -192,8 +193,8 @@ CMD [“python”, “/usr/bin/main.py”]
 
 Now build the docker image from this dockerfile and tag it with name modbus_app:1.0.
 
-```
 ### Build the image
+```
 # docker build -t modbus_app:1.0 .
 ```
 
