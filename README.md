@@ -48,6 +48,7 @@ as the data source to display real-time data on its dashboard
 * Location of the device (Latitude and Longitude)
 
 ![Solution](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Solution_block_diagram.png)
+![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
 Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py..
 The same simulator is located on ```raspberry pi at /home/pi/sisimulator/modbus_simulator/sync_modbus_server.py```.
