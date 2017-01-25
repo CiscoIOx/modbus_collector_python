@@ -63,7 +63,7 @@ as the data source to display real-time data on its dashboard
 ![Solution](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Solution_block_diagram.png)
 
 Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py..
-The same simulator is located on ```raspberry pi at /home/pi/sisimulator/day2_lab1/sync_modbus_server.py```.
+The same simulator is located on ```raspberry pi at /home/pi/sisimulator/modbus_simulator/sync_modbus_server.py```.
 Backedn web server code can be found at location cloud/cloudendpoint.py.
 
 ### Bootstrap configuration file
