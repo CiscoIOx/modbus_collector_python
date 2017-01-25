@@ -17,6 +17,7 @@ Complete guide to IOx app development concepts can be found [here] (https://deve
       - [Handling signals](#handling-signals)
   - [Creating Docker image](#creating-docker-image)
       - [Docker file](#docker-file)
+      - [Build the image](#build-the-image)
   - [Requesting resources](#requesting-resources)
   - [Creating an IOx application package](#creating-an-iox-application-package)
   - [Deploying the applicaiton](#deploying-the-applicaiton)
@@ -36,8 +37,8 @@ Complete guide to IOx app development concepts can be found [here] (https://deve
 ## Developing the Application
 ### Workflow
 Modbus application (app/main.py) polls the below mentioned data from holding registers
-of modbus slave every few seconds. This data is then sent in JSON format to dweet.io
-and backend web server. Freeboard.io can use this dweet or web server URL
+of modbus slave running on Raspberry Pi every few seconds. This data is then sent in JSON format to dweet.io
+and backend web server (optional). Freeboard.io can use this dweet or web server URL
 as the data source to display real-time data on its dashboard
 
 * Temperature (in Celcius)
@@ -55,8 +56,8 @@ modbus application.
 
 ### Bootstrap configuration file
 We can externalize certain application paramters that have to be configurable at the time of
-deployment or can be updated after starting the application on the device. IOx enables this via bootstrap
-configuration file.  This file should be named ```package_config.ini``` and should be present in
+deployment or can be updated after starting the application on the device. Cisco App hosting Framework (CAF) in 
+IOx enables this via bootstrap configuration file.  This file should be named ```package_config.ini``` and should be present in
 the root of the application package. Administration tools (Fog Director, Local Manager, ioxclient)
 provide ability to modify this file so that the values can be customized to a deployment environment.
 
@@ -66,7 +67,7 @@ as applicable during runtime of the application.
 
 Modbus slave simulator's IP address, port number, frequency to update the data, holding register addresses for
 weather and location attributes are externalized as seen in the snippet below. Also we have provided a handle in
-bootstrap configuration to enable or disable modbus app from sending data to dweet.io and backend web server.
+bootstrap configuration to enable or disable sending data to dweet.io and backend web server.
 Logging level of the modbus app has been set to 10 in ```package_config_ini```.
 
 ```
@@ -107,9 +108,9 @@ log_level: 10
 console: yes
 ```
 ### Environment variables
-Cisco App hosting Framework (CAF) in IOx provides a set of environment variables for
-applications. We have utilized ```CAF_APP_PATH``` and ```CAF_APP_CONFIG_FILE``` to obtain
-absolute path of the app and absolute path of the bootstrap configuration file.
+CAF provides a set of environment variables for applications. We have utilized 
+```CAF_APP_PATH``` and ```CAF_APP_CONFIG_FILE``` to obtain absolute path of the app 
+and absolute path of the bootstrap configuration file.
 
 ```
 # Get hold of the configuration file (package_config.ini)
@@ -128,7 +129,7 @@ writes the logs to the directory indicated by the environment variable ```CAF_AP
 
 ```
     log_file_dir = os.getenv("CAF_APP_LOG_DIR", "/tmp")
-    log_file_path = os.path.join(log_file_dir, "thingtalk.log")
+    log_file_path = os.path.join(log_file_dir, "modbus_app.log")
 ```
 
 For further details on application logging refer the section [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/#application-logging-and-persistent-storage)
@@ -166,7 +167,7 @@ signal.signal(signal.SIGINT, _sleep_handler)
 ## Creating Docker image
 
 ### Docker file
-Create a docker file with information like base rootfs location, modbus app's python module
+Create a file named ```Dockerfile``` with information like base rootfs location, modbus app's python module
 dependencies, the port that needs to be exposed for the application and finally the command to run the applicaiton.
 
 ```
@@ -193,6 +194,7 @@ CMD [“python”, “/usr/bin/main.py”]
 Now build the docker image from this dockerfile and tag it with name modbus_app:1.0.
 
 ```
+### Build the image
 # docker build -t modbus_app:1.0 .
 ```
 
