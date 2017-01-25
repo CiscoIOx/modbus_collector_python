@@ -456,6 +456,9 @@ file located [here.](http://gitlab.cisco.com/iox/mqtt_app/blob/master/freeboard/
 
 Note: Make sure to update the data source with correct dweet name with which modbus application is dweeting the data.
 
+Once we have everything setup, the weather and location data should flow in from raspberry pi to IR829 modbus app and then to freeboard
+dashboard. 
+![Dashboard](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/freeboard%20screenshot.png)
 
 ## Troubleshooting the app
 ### Viewing application logs
