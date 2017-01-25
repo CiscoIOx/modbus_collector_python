@@ -51,6 +51,9 @@ as the data source to display real-time data on its dashboard
 ![Solution](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Solution_block_diagram.png)
 
 #### Developer Journey
+Here are the steps followed in developing, deploying, activating, starting and troubleshooting the modbus
+application.
+
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
 Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py..
