@@ -7,8 +7,8 @@ Complete guide to IOx app development concepts can be found [here] (https://deve
 
 Broadly we will cover the following:
 
-1. [Implementing modbus application in python](##Developing the Application)
-2. Creating a docker image with python application
+* Implementing modbus application in python
+* Creating a docker image with python application
 * Requesting resources
 * Creating an IOx application package from the docker image
 * Deploying the applicaiton
