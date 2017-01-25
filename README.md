@@ -1,6 +1,7 @@
+# Modbus Application
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+**Table of Contents**
 
 - [Modbus Application](#modbus-application)
   - [Overview](#overview)
@@ -29,8 +30,6 @@
       - [Debugging error scenario](#debugging-error-scenario)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
-# Modbus Application
 ## Overview
 Modbus application demonstrates how to acquire data from modbus slave and push the data to
 a cloud visualizer like freeboard.io. This app is built in dockerized development
