@@ -50,11 +50,12 @@ as the data source to display real-time data on its dashboard
 
 Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py..
 The same simulator is located on ```raspberry pi at /home/pi/sisimulator/modbus_simulator/sync_modbus_server.py```.
-Backedn web server code can be found at location cloud/cloudendpoint.py.
+In following sections, we have highlighted various IOx development concepts that have been used to develop the
+modbus application.
 
 ### Bootstrap configuration file
-We can externalize certain variables whose values will need to be configurable at the time of
-deployment or can be updated while installed on the device. IOx enables this via bootstrap
+We can externalize certain application paramters that have to be configurable at the time of
+deployment or can be updated after starting the application on the device. IOx enables this via bootstrap
 configuration file.  This file should be named ```package_config.ini``` and should be present in
 the root of the application package. Administration tools (Fog Director, Local Manager, ioxclient)
 provide ability to modify this file so that the values can be customized to a deployment environment.
