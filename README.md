@@ -5,8 +5,6 @@ a cloud visualizer like freeboard.io. This app is built in dockerized developmen
 environment and it follows various development concepts recommended for IOx apps.
 Complete guide to IOx app development concepts can be found [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
 
-Broadly we will cover the following:
-
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
