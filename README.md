@@ -47,7 +47,10 @@ as the data source to display real-time data on its dashboard
 * Key operation detected (UP/DOWN/LEFT/RIGHT/SELECT)
 * Location of the device (Latitude and Longitude)
 
+#### Solution
 ![Solution](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Solution_block_diagram.png)
+
+#### Developer Journey
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
 Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py..
