@@ -73,6 +73,8 @@ Table of Contents
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
+Here is the pictorial representation of the steps.
+
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
 ## Step 1 - Develop/Build/Packaging the application
