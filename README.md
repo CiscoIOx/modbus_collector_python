@@ -1,10 +1,15 @@
 # Modbus Application
+## Overview
+Modbus application demonstrates how to acquire data from modbus slave and push the data to
+a cloud visualizer like freeboard.io. This app is built in dockerized development
+environment and it follows various development concepts recommended for IOx apps.
+Complete guide to IOx app development concepts can be found [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
+
+Broadly we will cover the following:
+
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 **Table of Contents**
-
-- [Modbus Application](#modbus-application)
-  - [Overview](#overview)
   - [Developing the Application](#developing-the-application)
       - [Workflow](#workflow)
       - [Bootstrap configuration file](#bootstrap-configuration-file)
@@ -30,23 +35,6 @@
       - [Debugging error scenario](#debugging-error-scenario)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-## Overview
-Modbus application demonstrates how to acquire data from modbus slave and push the data to
-a cloud visualizer like freeboard.io. This app is built in dockerized development
-environment and it follows various development concepts recommended for IOx apps.
-Complete guide to IOx app development concepts can be found [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
-
-Broadly we will cover the following:
-
-* Implementing modbus application in python
-* Creating a docker image with python application
-* Requesting resources
-* Creating an IOx application package from the docker image
-* Deploying the applicaiton
-* Activating the appliation
-* Start/Stop the app
-* Troubleshooting the app
-
 ## Developing the Application
 ### Workflow
 Modbus application (app/main.py) polls the below mentioned data from holding registers
