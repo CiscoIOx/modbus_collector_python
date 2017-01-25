@@ -42,7 +42,37 @@ Freeboard.io will use the dweet sent by the application as the data source to di
 ## IOx App Developer Journey
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
---> Add TOC here.
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+
+
+- [Develop/Build/Packaging the application](#developbuildpackaging-the-application)
+  - [IOx App development concepts](#iox-app-development-concepts)
+    - [Externalize App configuration](#externalize-app-configuration)
+    - [Environment variables](#environment-variables)
+    - [Application logging and persistent storage](#application-logging-and-persistent-storage)
+    - [Safeguarding against flash wear](#safeguarding-against-flash-wear)
+    - [Handling signals](#handling-signals)
+  - [Creating Docker image](#creating-docker-image)
+    - [Docker file](#docker-file)
+    - [Build the image](#build-the-image)
+  - [Package Descriptor for requesting resources](#package-descriptor-for-requesting-resources)
+  - [Create an IOx compatible application package](#create-an-iox-compatible-application-package)
+- [Deploying the applicaiton](#deploying-the-applicaiton)
+- [Activate and Configure the application](#activate-and-configure-the-application)
+  - [Activating the app](#activating-the-app)
+    - [ioxclient](#ioxclient)
+    - [Local Manager](#local-manager)
+  - [Update application bootstrap configuration](#update-application-bootstrap-configuration)
+  - [NAT configuration on IOS](#nat-configuration-on-ios)
+- [Start the app](#start-the-app)
+- [Visualize the data](#visualize-the-data)
+- [Troubleshooting the app](#troubleshooting-the-app)
+  - [Viewing application logs](#viewing-application-logs)
+  - [Connecting to the app console](#connecting-to-the-app-console)
+  - [Debugging error scenario](#debugging-error-scenario)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
 ## Develop/Build/Packaging the application
 In this section we will look at how to develop the application using IOx specific concepts, 
