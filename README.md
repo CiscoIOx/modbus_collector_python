@@ -4,36 +4,6 @@ Modbus application demonstrates how to acquire data from modbus slave and push t
 a cloud visualizer like freeboard.io. This app is built in dockerized development
 environment and it follows various development concepts recommended for IOx apps.
 
-
-<!-- START doctoc generated TOC please keep comment here to allow auto update -->
-<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-**Table of Contents**
-  - [Developing the Application](#developing-the-application)
-      - [Workflow](#workflow)
-      - [Bootstrap configuration file](#bootstrap-configuration-file)
-      - [Environment variables](#environment-variables)
-      - [Application logging and persistent storage](#application-logging-and-persistent-storage)
-      - [Safeguarding against flash wear](#safeguarding-against-flash-wear)
-      - [Handling signals](#handling-signals)
-  - [Creating Docker image](#creating-docker-image)
-      - [Docker file](#docker-file)
-      - [Build the image](#build-the-image)
-  - [Requesting resources](#requesting-resources)
-  - [Creating an IOx application package](#creating-an-iox-application-package)
-  - [Deploying the applicaiton](#deploying-the-applicaiton)
-  - [Managing the application](#managing-the-application)
-      - [Activating the app](#activating-the-app)
-          - [ioxclient](#ioxclient)
-          - [Local Manager](#local-manager)
-      - [Update application bootstrap config](#update-application-bootstrap-config)
-      - [NAT configuration on IOS](#nat-configuration-on-ios)
-      - [Start/Stop the app](#startstop-the-app)
-  - [Troubleshooting the app](#troubleshooting-the-app)
-      - [Viewing application logs](#viewing-application-logs)
-      - [Connecting to the app console](#connecting-to-the-app-console)
-      - [Debugging error scenario](#debugging-error-scenario)
-
-<!-- END doctoc generated TOC please keep comment here to allow auto update -->
 ## Setup details
 ### Prerequisites
 You will need following hardware and software components to get started.
