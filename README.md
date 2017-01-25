@@ -1,8 +1,44 @@
-# Modbus Application 
+<!-- TOC depthFrom:1 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+
+- [Modbus Application](#modbus-application)
+	- [Overview](#overview)
+	- [Developing the Application](#developing-the-application)
+		- [Workflow](#workflow)
+		- [Bootstrap configuration file](#bootstrap-configuration-file)
+- [Set to no to disable it](#set-to-no-to-disable-it)
+- [DEBUG:10, INFO: 20, WARNING: 30, ERROR: 40, CRITICAL: 50, NOTSET: 0](#debug10-info-20-warning-30-error-40-critical-50-notset-0)
+- [Enable/disable logging to stdout](#enabledisable-logging-to-stdout)
+		- [Environment variables](#environment-variables)
+- [Get hold of the configuration file (package_config.ini)](#get-hold-of-the-configuration-file-packageconfigini)
+		- [Application logging and persistent storage](#application-logging-and-persistent-storage)
+		- [Safeguarding against flash wear](#safeguarding-against-flash-wear)
+		- [Handling signals](#handling-signals)
+	- [Creating Docker image](#creating-docker-image)
+		- [Docker file](#docker-file)
+- [docker build -t modbus_app:1.0 .](#docker-build-t-modbusapp10-)
+	- [Requesting resources](#requesting-resources)
+- [Specify runtime and startup](#specify-runtime-and-startup)
+	- [Creating an IOx application package](#creating-an-iox-application-package)
+	- [Deploying the applicaiton](#deploying-the-applicaiton)
+	- [Managing the application](#managing-the-application)
+		- [Activating the app](#activating-the-app)
+			- [ioxclient](#ioxclient)
+			- [Local Manager](#local-manager)
+		- [Update application bootstrap config](#update-application-bootstrap-config)
+- [Set to no to disable it](#set-to-no-to-disable-it)
+	- [NAT configuration on IOS](#nat-configuration-on-ios)
+	- [Start/Stop the app](#startstop-the-app)
+	- [Troubleshooting the app](#troubleshooting-the-app)
+		- [Viewing application logs](#viewing-application-logs)
+		- [Connecting to the app console](#connecting-to-the-app-console)
+		- [Debugging error scenario](#debugging-error-scenario)
+
+<!-- /TOC -->
+# Modbus Application
 ## Overview
-Modbus application demonstrates how to acquire data from modbus slave and push the data to 
-a cloud visualizer like freeboard.io. This app is built in dockerized development 
-environment and it follows various development concepts recommended for IOx apps. 
+Modbus application demonstrates how to acquire data from modbus slave and push the data to
+a cloud visualizer like freeboard.io. This app is built in dockerized development
+environment and it follows various development concepts recommended for IOx apps.
 Complete guide to IOx app development concepts can be found [here] (https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
 
 Broadly we will cover the following:
@@ -29,22 +65,22 @@ as the data source to display real-time data on its dashboard
 * Key operation detected (UP/DOWN/LEFT/RIGHT/SELECT)
 * Location of the device (Latitude and Longitude)
 
-Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py.. 
+Modbus slave simulator code can be found at location  modbus_simulator/sync_modbus_server.py..
 The same simulator is located on ```raspberry pi at /home/pi/sisimulator/day2_lab1/sync_modbus_server.py```.
 Backedn web server code can be found at location cloud/cloudendpoint.py.
 
 ### Bootstrap configuration file
-We can externalize certain variables whose values will need to be configurable at the time of 
-deployment or can be updated while installed on the device. IOx enables this via bootstrap 
-configuration file.  This file should be named ```package_config.ini``` and should be present in 
-the root of the application package. Administration tools (Fog Director, Local Manager, ioxclient) 
+We can externalize certain variables whose values will need to be configurable at the time of
+deployment or can be updated while installed on the device. IOx enables this via bootstrap
+configuration file.  This file should be named ```package_config.ini``` and should be present in
+the root of the application package. Administration tools (Fog Director, Local Manager, ioxclient)
 provide ability to modify this file so that the values can be customized to a deployment environment.
 
 For the modbus application, we have externalized the configuration parameters for modbus slave, dweet,
-cloud backend web server and logging level using bootstrap configuration file. Then we can modify these parameters 
-as applicable during runtime of the application. 
+cloud backend web server and logging level using bootstrap configuration file. Then we can modify these parameters
+as applicable during runtime of the application.
 
-Modbus slave simulator's IP address, port number, frequency to update the data, holding register addresses for 
+Modbus slave simulator's IP address, port number, frequency to update the data, holding register addresses for
 weather and location attributes are externalized as seen in the snippet below. Also we have provided a handle in
 bootstrap configuration to enable or disable modbus app from sending data to dweet.io and backend web server.
 Logging level of the modbus app has been set to 10 in ```package_config_ini```.
@@ -88,9 +124,9 @@ console: yes
 ```
 ### Environment variables
 Cisco App hosting Framework (CAF) in IOx provides a set of environment variables for
-applications. We have utilized ```CAF_APP_PATH``` and ```CAF_APP_CONFIG_FILE``` to obtain 
+applications. We have utilized ```CAF_APP_PATH``` and ```CAF_APP_CONFIG_FILE``` to obtain
 absolute path of the app and absolute path of the bootstrap configuration file.
- 
+
 ```
 # Get hold of the configuration file (package_config.ini)
 moduledir = os.path.abspath(os.path.dirname(__file__))
@@ -135,11 +171,11 @@ down, CAF sends SIGTERM signal to the application. These signal handlers enable 
 def _sleep_handler(signum, frame):
     print "SIGINT Received. Stopping app"
     raise KeyboardInterrupt
-    
+
 def _stop_handler(signum, frame):
     print "SIGTERM Received. Stopping app"
     raise KeyboardInterrupt
-    
+
 signal.signal(signal.SIGTERM, _stop_handler)
 signal.signal(signal.SIGINT, _sleep_handler)
 ```
@@ -164,7 +200,7 @@ COPY main.py /usr/bin/main.py
 EXPOSE 9000
 CMD [“python”, “/usr/bin/main.py”]
 ```
-* We have used cisco hosted docker image for base rootfs. 
+* We have used cisco hosted docker image for base rootfs.
 * More details regarding opkg and cisco hosted docker image can be found [here.]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository)
 * List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
@@ -204,8 +240,8 @@ app:
 ```
 Here the application requires CPU architecture to be x86_64 and indicates that it is docker
 style application. And the requested profile is c1.small which corresponds to certain
-number of CPU units and memory size. The app also indicates the network interface eth0 will be 
-required with usage of TCP port 9000. At the time of activation, the administrator has to 
+number of CPU units and memory size. The app also indicates the network interface eth0 will be
+required with usage of TCP port 9000. At the time of activation, the administrator has to
 associate eth0 to a specific logical network (ex. iox-nat0).
 
 This package descriptor files also includes metadata about the application.
@@ -239,7 +275,7 @@ This command creates IOx application package named ``package.tar```, which can b
 further details regarding creating an IOx app package.
 
 ## Deploying the applicaiton
-Before installing the app, setup ```ioxclient profile``` using below command and update the platform related parameters like 
+Before installing the app, setup ```ioxclient profile``` using below command and update the platform related parameters like
 name, IP address, port and authentication details.
 
 ```
@@ -324,7 +360,7 @@ server: 127.0.0.1
 ```
 ## NAT configuration on IOS
 We have also built a REST URL end point listening on port 9000 in the modbus application for dumping the weather and location data in JSON format at any point
-in time. 
+in time.
 
 Bootstrap configuration of port in ```package_config_ini``` file.
 ```
@@ -334,7 +370,7 @@ port: 9000
 
 Before accessing the REST endpoint, we need to setup the NAT configuration on IOS to open up the port 9000 to external world. This can be done using the command
 ```
-IR829#show iox host list detail 
+IR829#show iox host list detail
 
 IOX Server is running. Process ID: 325
 Count of hosts registered: 1
@@ -400,6 +436,5 @@ Refer [application management section](https://developer.cisco.com/media/iox-dev
 ### Debugging error scenario
 Lets take an example on how to debug an error scenario. If, for some reason, we have invalid backend server port configured in
 bootstrap configuration file. This will cause the modbus app to not able to connect to the server for sending
-weather and location data. We can connect to the application console and debug the issue with observerd console 
+weather and location data. We can connect to the application console and debug the issue with observerd console
 error messages. Also we can checkout the application log files for further sequence of events.
-
