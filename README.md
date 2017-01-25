@@ -75,7 +75,7 @@ Table of Contents
 
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
-## Develop/Build/Packaging the application
+## Step 1 - Develop/Build/Packaging the application
 In this section we will look at how to develop the application using IOx specific concepts, 
 to build the docker image, to add package descriptor file and finally package the image into IOx compatible format.
 
@@ -301,7 +301,7 @@ This command creates IOx application package named ``package.tar```, which can b
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/simple-python/#creating-an-iox-application-package-from-the-docker-image) for
 further details regarding creating an IOx app package.
 
-## Deploying the applicaiton
+## Step 2 - Deploying the applicaiton
 Before deploying the app, setup ```ioxclient profile``` using below command and update the platform related parameters like
 name, IP address, port and authentication details.
 
@@ -324,7 +324,7 @@ Now deploy the application on the platform (for eg., IR829) using the command
 
 ``` $ ioxclient application install modbus_app ./package.tar ```
 
-## Activate and Configure the application
+## Step 3 - Activate and Configure the application
 IOx application can be managed via ioxclient, Local Manager or Fog Director. We will discuss
 ioxclient and local manager approaches below.
 
@@ -440,7 +440,7 @@ JSON data can be accessed using the URL
 https://IR829_PUBLIC_IP_ADDRESS:9000
 ```
 
-## Start the app
+## Step 4 - Start the app
 Use below ```ioxclient``` command to start the application.
 ```
 ioxclient app start modbus_app
@@ -449,7 +449,7 @@ ioxclient app start modbus_app
 In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
 ![Start app](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_Start_app.png)
 
-## Visualize the data
+## Step 5 - Visualize the data
 In this section, we will look at how to setup freeboard.io to visualize the data sent by the modbus application.
 
 Log into freeboard.io and create a new dashbaord. Now setup the dashboard's datasource and widgets by importing the json
@@ -461,7 +461,7 @@ Once we have everything setup, the weather and location data should flow in from
 dashboard. 
 ![Dashboard](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/freeboard%20screenshot.png)
 
-## Troubleshooting the app
+## Step 6 - Troubleshooting the app
 ### Viewing application logs
 In LM, click ```manage``` action corresponding to the application and select the ```Logs``` tab. Here we can download the application
 log file ```modbus_app.log```.
