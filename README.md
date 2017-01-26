@@ -45,7 +45,8 @@ Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
-- [Step 1 : Develop/Build/Packaging the application](#step-1--developbuildpackaging-the-application)
+
+- [Step 1 Develop/Build/Packaging the application](#step-1-developbuildpackaging-the-application)
   - [IOx App development concepts](#iox-app-development-concepts)
     - [Externalize App configuration](#externalize-app-configuration)
     - [Environment variables](#environment-variables)
@@ -76,7 +77,7 @@ Here is the pictorial representation of the steps.
 
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
-## Step 1 : Develop/Build/Packaging the application
+## Step 1 Develop/Build/Packaging the application
 In this section we will look at how to develop the application using IOx specific concepts, 
 to build the docker image, to add package descriptor file and finally package the image into IOx compatible format.
 
