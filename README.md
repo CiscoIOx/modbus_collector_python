@@ -41,9 +41,9 @@ Freeboard.io will use the dweet sent by the application as the data source to di
 
 ## IOx App Developer Journey
 
+Table of Contents
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-Table of Contents
 
 - [Step 1 : Develop/Build/Packaging the application](#step-1--developbuildpackaging-the-application)
   - [IOx App development concepts](#iox-app-development-concepts)
@@ -72,7 +72,6 @@ Table of Contents
   - [Debugging error scenario](#debugging-error-scenario)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
-
 Here is the pictorial representation of the steps.
 
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
