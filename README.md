@@ -83,8 +83,7 @@ to build the docker image, to add package descriptor file and finally package th
 
 ### IOx App development concepts
 We will look at some of the IOx app development concepts utilized while building
-modbus application. Complete guide to IOx app development concepts can be found [here]. 
-(https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
+modbus application. Complete guide to IOx app development concepts can be found [here.](https://developer.cisco.com/media/iox-dev-guide-11-28-16/concepts/app-concepts/)
 
 #### Externalize App configuration
 We can externalize some of the IOx application paramters that can be reconfigurable at the time of
