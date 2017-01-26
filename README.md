@@ -45,7 +45,7 @@ Freeboard.io will use the dweet sent by the application as the data source to di
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 Table of Contents
 
-- [Step 1 - Develop/Build/Packaging the application](#step-1---developbuildpackaging-the-application)
+- [Step 1 : Develop/Build/Packaging the application](#step-1--developbuildpackaging-the-application)
   - [IOx App development concepts](#iox-app-development-concepts)
     - [Externalize App configuration](#externalize-app-configuration)
     - [Environment variables](#environment-variables)
