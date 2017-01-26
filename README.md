@@ -205,11 +205,33 @@ signal.signal(signal.SIGTERM, _stop_handler)
 signal.signal(signal.SIGINT, _sleep_handler)
 ```
 ### Creating Docker image
-In this section we will look at how to build docker image utilizing cisco hosted docker image.
+In this section we will look at how to build docker image utilizing cisco hosted docker image. We will follow 2-step 
+approach to build optimal sized docker image. 
 
-#### Docker file
-Create a file named ```Dockerfile``` with information like base rootfs location, modbus app's python module
-dependencies, the port that needs to be exposed for the application and finally the command to run the applicaiton.
+1. Build the first docker image by installing all the application dependencies. If required, build the application as well.
+Copy the app and dependency binaries to a mounted location on the host. 
+2. Build the second docker image by copying the application and its dependency binaries.
+
+By copying just the binaries, we can significantly reduce the docker image size.
+
+#### [Image 1] Creating a docker image to setup the build environment
+Create a docker file with the commands to install all the modbus application dependencies like
+
+* PyModbus (internally depends on twisted and serial)
+* Bottle framework
+* wsgiref modules.
+* We need iox-toolchain to compile twisted module. 
+
+```
+$ cd app/src
+```
+
+##### Docker file
+Here is the dockerfile to install all the necessary modules. We have utilized opkg
+to install python and pip. More details about opkg can be found [here.]
+(https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository).
+List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
+(http://engci-maven.cisco.com/artifactory/webapp/#/artifacts/browse/simple/General/IOx-Opkg-dev)
 
 ```
 FROM devhub-docker.cisco.com/iox-docker/base-x86_64
@@ -217,24 +239,76 @@ RUN opkg update
 RUN opkg install python
 RUN opkg install python-dev
 RUN opkg install python-pip
-RUN opkg install gcc
-RUN opkg install binutils
+RUN opkg install iox-toolchain
 RUN pip install pymodbus
 RUN pip install wsgiref
 RUN pip install bottle
-COPY main.py /usr/bin/main.py
+```
+##### Build Docker Image 1
+From ```app/src``` dir, build the docker image1 using command
+
+```
+$ sudo docker build -t modbus_app_src:1.0 . 
+```
+
+##### Run the image1 locally and copy binaries
+Now run the docker image1 locally and mount the host location ```app/bin``` onto docker container path ```/opt/share```.
+And copy the dependency binaries to the host location.
+
+```
+app/src$ sudo docker run -v ${PWD}/../bin:/opt/share -it modbus_app_src:1.0 /bin/sh
+Password:
+sh-4.3# 
+sh-4.3# 
+sh-4.3# cd opt/share
+sh-4.3# cp /usr/lib/python2.7/site-packages/bottle.py .
+sh-4.3# cp -r /usr/lib/python2.7/site-packages/wsgiref .
+sh-4.3# cp -r /usr/lib/python2.7/site-packages/twisted .
+sh-4.3# cp -r /usr/lib/python2.7/site-packages/serial .
+sh-4.3# cp -r /usr/lib/python2.7/site-packages/pymodbus .
+sh-4.3#
+sh-4.3# 
+sh-4.3# exit
+
+src$ cd ../bin/
+bin$ ls -al
+total 296
+drwxr-xr-x   8 sureshsankaran  staff     272 Jan 26 01:01 ..
+drwxr-xr-x   7 sureshsankaran  staff     238 Jan 26 01:00 .
+drwxr-xr-x  46 sureshsankaran  staff    1564 Jan 26 00:54 pymodbus
+drwxr-xr-x  23 sureshsankaran  staff     782 Jan 26 00:54 serial
+drwxr-xr-x  36 sureshsankaran  staff    1224 Jan 26 00:54 twisted
+drwxr-xr-x  14 sureshsankaran  staff     476 Jan 26 00:54 wsgiref
+-rw-r--r--   1 sureshsankaran  staff  150112 Jan 26 00:53 bottle.py
+```
+#### [Image 2] Creating a docker image with application binary contents
+We will create the second docker image with all dependency and application binaries.
+
+```
+$ cd app/
+```
+
+##### Dockerfile
+Here is the dockerfile to copy the binaries and command to run the application.
+
+```
+FROM devhub-docker.cisco.com/iox-docker/base-x86_64
+RUN opkg update
+RUN opkg install python
+RUN opkg install python-pip
+COPY bin/pymodbus/ /usr/lib/python2.7/site-packages/pymodbus/
+COPY bin/twisted/ /usr/lib/python2.7/site-packages/twisted/
+COPY bin/serial/ /usr/lib/python2.7/site-packages/serial/
+COPY bin/bottle.py /usr/lib/python2.7/site-packages/
+COPY bin/wsgiref/ /usr/lib/python2.7/site-packages/wsgiref/
+RUN ls -al /usr/lib/python2.7/site-packages/wsgiref/
+RUN opkg remove python-pip
+COPY src/main.py /usr/bin/main.py
 EXPOSE 9000
 CMD [“python”, “/usr/bin/main.py”]
 ```
-* We have used cisco hosted docker image for base rootfs.
-* More details regarding opkg and cisco hosted docker image can be found [here.]
-(https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository)
-* List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
-(http://engci-maven.cisco.com/artifactory/webapp/#/artifacts/browse/simple/General/IOx-Opkg-dev)
 
-Now build the docker image from this dockerfile and tag it with name modbus_app:1.0.
-
-#### Build the image
+##### Build the docker image2
 ```
 # docker build -t modbus_app:1.0 .
 ```
