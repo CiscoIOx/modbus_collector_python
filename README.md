@@ -216,9 +216,10 @@ approach to build optimal sized docker image.
 1. Build the first docker image to install all the application run-time dependencies on a mounted host location. If required, build the application as well.
 2. Build the second docker image by copying the application and its dependency binaries.
 
-By copying just the binaries, we can significantly reduce the docker image size.
+By copying just the binaries, we can significantly reduce the docker image size. Also we don't need iox-toolchain and python-dev packages
+in the final docker image.
 
-#### [Image 1] Creating a docker image to setup the build environment
+#### [Docker image 1] Creating a docker image to setup the build environment
 In this section we will look at how to build docker image which is used to compile
 the application (if required) and its dependant modules.
 
@@ -276,25 +277,22 @@ Now run the docker image1 locally and mount the host location ```app/``` onto do
 copied into docker image, so that we can install the dependant modules on the mounted path.
 
 ```
-app/src$ sudo docker run -v ${PWD}/..:/opt/share -it modbus_app_src:1.0 /bin/sh /usr/bin/pip_install_script.sh
+$ cd app/
+$ mkdir pip_output
+$ sudo docker run -v ${PWD}/pip_output:/opt/share -it modbus_app_src:1.0 /bin/sh /usr/bin/pip_install_script.sh
 Password:
 $
 ```
 Now we have installed all the application dependant python packages at location ```app/lib```.
 
 ```
-$ cd app/
+$ cd app/pip_output
 $ ls -alt
 total 24
-drwxr-xr-x   4 sureshsankaran  staff  136 Jan 27 14:50 project
 drwxr-xr-x  14 sureshsankaran  staff  476 Jan 27 14:36 bin
 drwxr-xr-x   9 sureshsankaran  staff  306 Jan 27 14:36 .
 drwxr-xr-x   3 sureshsankaran  staff  102 Jan 27 14:36 lib
-drwxr-xr-x   8 sureshsankaran  staff  272 Jan 27 14:33 src
--rw-r--r--   1 sureshsankaran  staff  256 Jan 27 14:20 Dockerfile
 drwxr-xr-x  12 sureshsankaran  staff  408 Jan 26 11:32 ..
--rw-r--r--   1 sureshsankaran  staff  121 Jan 23 13:48 activation.json
--rw-r--r--   1 sureshsankaran  staff  329 Jan 13 10:54 README.md
 ```
 
 #### [Image 2] Creating a docker image with application binary contents
@@ -313,7 +311,7 @@ FROM devhub-docker.cisco.com/iox-docker/base-x86_64
 RUN opkg update
 RUN opkg install python
 RUN opkg install python-pip
-ADD lib/ /usr/lib/
+ADD pip_output/lib/ /usr/lib/
 RUN opkg remove python-pip
 COPY src/main.py /usr/bin/main.py
 EXPOSE 9000
