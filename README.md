@@ -54,11 +54,11 @@ Table of Contents
       - [Safeguarding against flash wear](#safeguarding-against-flash-wear)
       - [Handling signals](#handling-signals)
   - [Creating Docker image](#creating-docker-image)
-      - [[Image 1] Creating a docker image to setup the build environment](#image-1-creating-a-docker-image-to-setup-the-build-environment)
+      - [[Docker image 1] Creating a docker image to setup the build environment](#docker-image-1-creating-a-docker-image-to-setup-the-build-environment)
           - [Docker file](#docker-file)
           - [Build Docker Image 1](#build-docker-image-1)
           - [Run the image1 locally and install dependant modules](#run-the-image1-locally-and-install-dependant-modules)
-      - [[Image 2] Creating a docker image with application binary contents](#image-2-creating-a-docker-image-with-application-binary-contents)
+      - [[Docker image 2] Creating a docker image with application binary contents](#docker-image-2-creating-a-docker-image-with-application-binary-contents)
           - [Dockerfile](#dockerfile)
           - [Build the docker image2](#build-the-docker-image2)
   - [Package Descriptor for requesting resources](#package-descriptor-for-requesting-resources)
@@ -73,9 +73,9 @@ Table of Contents
 - [[Step 4] Start the app](#step-4-start-the-app)
 - [[Step 5] Visualize the data](#step-5-visualize-the-data)
 - [[Step 6]  Troubleshooting the app](#step-6--troubleshooting-the-app)
-    - [Viewing application logs](#viewing-application-logs)
-    - [Connecting to the app console](#connecting-to-the-app-console)
-    - [Debugging error scenario](#debugging-error-scenario)
+  - [Viewing application logs](#viewing-application-logs)
+  - [Connecting to the app console](#connecting-to-the-app-console)
+  - [Debugging error scenario](#debugging-error-scenario)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 Here is the pictorial representation of the steps.
@@ -295,7 +295,7 @@ drwxr-xr-x   3 sureshsankaran  staff  102 Jan 27 14:36 lib
 drwxr-xr-x  12 sureshsankaran  staff  408 Jan 26 11:32 ..
 ```
 
-#### [Image 2] Creating a docker image with application binary contents
+#### [Docker image 2] Creating a docker image with application binary contents
 We will create the second docker image with all dependent and application binaries.
 
 ```
