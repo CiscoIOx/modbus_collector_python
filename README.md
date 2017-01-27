@@ -31,9 +31,9 @@ Modbus slave simulator code can be found in gitlab at  modbus_simulator/sync_mod
 The same simulator is located on ```raspberry pi at /home/pi/sisimulator/modbus_simulator/sync_modbus_server.py```.
 
 ### Modbus application functionality
-Modbus application is installed on IR829 platform. For every few seconds, the application 
+Modbus application is installed on IR829 platform. For every few seconds, the application
 polls the modbus slave simulator on Raspberry Pi for weather and location data. Application then
-sends this data in JSON format to dweet.io and backend web server (optional).  Entire app functionality 
+sends this data in JSON format to dweet.io and backend web server (optional).  Entire app functionality
 is implemented in ```app/main.py```.
 
 ### Freeboard
@@ -83,7 +83,7 @@ Here is the pictorial representation of the steps.
 ![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
 
 ## [Step 1] Develop/Build/Packaging the application
-In this section we will look at how to develop the application using IOx specific concepts, 
+In this section we will look at how to develop the application using IOx specific concepts,
 to build the docker image, to add package descriptor file and finally package the image into IOx compatible format.
 
 ### IOx App development concepts
@@ -92,24 +92,24 @@ modbus application. Complete guide to IOx app development concepts can be found 
 
 #### Externalize App configuration
 We can externalize some of the IOx application paramters that can be reconfigurable at the time of
-deployment or can be updated after starting the application on the device. 
+deployment or can be updated after starting the application on the device.
 
-Cisco App hosting Framework (CAF) in IOx enables this feature via bootstrap configuration file.  This file 
-should be named ```package_config.ini``` and be present in the root of the application package. Administration 
-tools (Fog Director, Local Manager, ioxclient) provide ability to modify this file so that the values can be 
+Cisco App hosting Framework (CAF) in IOx enables this feature via bootstrap configuration file.  This file
+should be named ```package_config.ini``` and be present in the root of the application package. Administration
+tools (Fog Director, Local Manager, ioxclient) provide ability to modify this file so that the values can be
 customized to a deployment environment.
 
 For the modbus application, we have externalized the configuration parameters for modbus slave, dweet,
 cloud backend web server and logging level using bootstrap configuration file.
 
-Modbus slave simulator's 
+Modbus slave simulator's
 
 * IP address
 * port number
 * frequency to update the data
 * holding register addresses for weather and location attributes
 
-are externalized as seen in the snippet below. 
+are externalized as seen in the snippet below.
 
 ```
 File: app/project/package_config_ini
@@ -148,13 +148,13 @@ log_level: 10
 # Enable/disable logging to stdout
 console: yes
 ```
-Also we have provided a handle in bootstrap configuration to enable or disable 
-sending data to dweet.io and backend web server. Logging level of the modbus app 
+Also we have provided a handle in bootstrap configuration to enable or disable
+sending data to dweet.io and backend web server. Logging level of the modbus app
 has been set to 10 in ```package_config_ini```.
 
 #### Environment variables
-CAF provides a set of environment variables for applications. We have utilized 
-```CAF_APP_PATH``` and ```CAF_APP_CONFIG_FILE``` to obtain absolute path of the app 
+CAF provides a set of environment variables for applications. We have utilized
+```CAF_APP_PATH``` and ```CAF_APP_CONFIG_FILE``` to obtain absolute path of the app
 and absolute path of the bootstrap configuration file.
 
 ```
@@ -210,84 +210,95 @@ signal.signal(signal.SIGTERM, _stop_handler)
 signal.signal(signal.SIGINT, _sleep_handler)
 ```
 ### Creating Docker image
-In this section we will look at how to build docker image utilizing cisco hosted docker image. We will follow 2-step 
-approach to build optimal sized docker image. 
+In this section we will look at how to build docker image utilizing cisco hosted docker image. We will follow 2-step
+approach to build optimal sized docker image.
 
-1. Build the first docker image by installing all the application dependencies. If required, build the application as well.
-Copy the app and dependency binaries to a mounted location on the host. 
+1. Build the first docker image by installing all the application run-time dependencies on a mounted host location. If required, build the application as well.
 2. Build the second docker image by copying the application and its dependency binaries.
 
 By copying just the binaries, we can significantly reduce the docker image size.
 
 #### [Image 1] Creating a docker image to setup the build environment
-Create a docker file with the commands to install all the modbus application dependencies like
+In this section we will look at how to build docker image which is used to compile
+the application (if required) and its dependant modules.
 
-* PyModbus (internally depends on twisted and serial)
-* Bottle framework
-* wsgiref modules.
-* We need iox-toolchain to compile twisted module. 
+Create ```requirements.txt``` file with the python modules that are required at the application
+run-time.
 
 ```
 $ cd app/src
+$ cat requirements.txt
+pymodbus
+bottle
+wsgiref
+```
+
+Create a script ```pip_install_script.sh``` to do ```pip install``` of all the python
+modules needed by the application.
+
+```
+$ cat pip_install_script.sh
+pip install -r /usr/bin/requirements.txt --install-option="--prefix=/opt/share"
+$
 ```
 
 ##### Docker file
-Here is the dockerfile to install all the necessary modules. We have utilized opkg
-to install python and pip. More details about opkg can be found [here.]
+Now create a docker file with the commands to install python, pip and IOx build toolchain. Also copy the
+```requirements.txt``` and ```pip_install_script``` files into docker image.
+
+We have utilized opkg to install python and pip. More details about opkg can be found [here.]
 (https://developer.cisco.com/media/iox-dev-guide-11-28-16/docker/docker-hub/#opkg-package-repository).
 List of all available opkg packages (.ipk extension) for the corresponding platform can be found [here.]
 (http://engci-maven.cisco.com/artifactory/webapp/#/artifacts/browse/simple/General/IOx-Opkg-dev)
 
 ```
+$ cd app/src
+$ cat Dockerfile
 FROM devhub-docker.cisco.com/iox-docker/base-x86_64
+
 RUN opkg update
 RUN opkg install python
 RUN opkg install python-dev
 RUN opkg install python-pip
 RUN opkg install iox-toolchain
-RUN pip install pymodbus
-RUN pip install wsgiref
-RUN pip install bottle
+COPY requirements.txt /usr/bin/
+COPY pip_install_script.sh /usr/bin/
 ```
 ##### Build Docker Image 1
 From ```app/src``` dir, build the docker image1 using command
 
 ```
-$ sudo docker build -t modbus_app_src:1.0 . 
+$ sudo docker build -t modbus_app_src:1.0 .
 ```
 
-##### Run the image1 locally and copy binaries
-Now run the docker image1 locally and mount the host location ```app/bin``` onto docker container path ```/opt/share```.
-And copy the dependency binaries to the host location.
+##### Run the image1 locally and install dependant modules
+Now run the docker image1 locally and mount the host location ```app/``` onto docker container path ```/opt/share```. As part of this command run the script ```pip_install_script```, which we earlier
+copied into docker image, so that we can install the dependant modules on the mounted path.
 
 ```
-app/src$ sudo docker run -v ${PWD}/../bin:/opt/share -it modbus_app_src:1.0 /bin/sh
+app/src$ sudo docker run -v ${PWD}/..:/opt/share -it modbus_app_src:1.0 /bin/sh /usr/bin/pip_install_script.sh
 Password:
-sh-4.3# 
-sh-4.3# 
-sh-4.3# cd opt/share
-sh-4.3# cp /usr/lib/python2.7/site-packages/bottle.py .
-sh-4.3# cp -r /usr/lib/python2.7/site-packages/wsgiref .
-sh-4.3# cp -r /usr/lib/python2.7/site-packages/twisted .
-sh-4.3# cp -r /usr/lib/python2.7/site-packages/serial .
-sh-4.3# cp -r /usr/lib/python2.7/site-packages/pymodbus .
-sh-4.3#
-sh-4.3# 
-sh-4.3# exit
-
-src$ cd ../bin/
-bin$ ls -al
-total 296
-drwxr-xr-x   8 sureshsankaran  staff     272 Jan 26 01:01 ..
-drwxr-xr-x   7 sureshsankaran  staff     238 Jan 26 01:00 .
-drwxr-xr-x  46 sureshsankaran  staff    1564 Jan 26 00:54 pymodbus
-drwxr-xr-x  23 sureshsankaran  staff     782 Jan 26 00:54 serial
-drwxr-xr-x  36 sureshsankaran  staff    1224 Jan 26 00:54 twisted
-drwxr-xr-x  14 sureshsankaran  staff     476 Jan 26 00:54 wsgiref
--rw-r--r--   1 sureshsankaran  staff  150112 Jan 26 00:53 bottle.py
+$
 ```
+Now we have installed all the application dependant python packages at location ```app/lib```.
+
+```
+$ cd app/
+$ ls -alt
+total 24
+drwxr-xr-x   4 sureshsankaran  staff  136 Jan 27 14:50 project
+drwxr-xr-x  14 sureshsankaran  staff  476 Jan 27 14:36 bin
+drwxr-xr-x   9 sureshsankaran  staff  306 Jan 27 14:36 .
+drwxr-xr-x   3 sureshsankaran  staff  102 Jan 27 14:36 lib
+drwxr-xr-x   8 sureshsankaran  staff  272 Jan 27 14:33 src
+-rw-r--r--   1 sureshsankaran  staff  256 Jan 27 14:20 Dockerfile
+drwxr-xr-x  12 sureshsankaran  staff  408 Jan 26 11:32 ..
+-rw-r--r--   1 sureshsankaran  staff  121 Jan 23 13:48 activation.json
+-rw-r--r--   1 sureshsankaran  staff  329 Jan 13 10:54 README.md
+```
+
 #### [Image 2] Creating a docker image with application binary contents
-We will create the second docker image with all dependency and application binaries.
+We will create the second docker image with all dependent and application binaries.
 
 ```
 $ cd app/
@@ -298,15 +309,11 @@ Here is the dockerfile to copy the binaries and command to run the application.
 
 ```
 FROM devhub-docker.cisco.com/iox-docker/base-x86_64
+
 RUN opkg update
 RUN opkg install python
 RUN opkg install python-pip
-COPY bin/pymodbus/ /usr/lib/python2.7/site-packages/pymodbus/
-COPY bin/twisted/ /usr/lib/python2.7/site-packages/twisted/
-COPY bin/serial/ /usr/lib/python2.7/site-packages/serial/
-COPY bin/bottle.py /usr/lib/python2.7/site-packages/
-COPY bin/wsgiref/ /usr/lib/python2.7/site-packages/wsgiref/
-RUN ls -al /usr/lib/python2.7/site-packages/wsgiref/
+ADD lib/ /usr/lib/
 RUN opkg remove python-pip
 COPY src/main.py /usr/bin/main.py
 EXPOSE 9000
@@ -327,7 +334,7 @@ Modbus application describes its runtime resource requirements in package descri
 
 ```
 app:
-  cpuarch: "x86_64"  
+  cpuarch: "x86_64"
   type: docker
 
   resources:
@@ -367,11 +374,12 @@ Few things to note for docker style applications.
 * rootfs.tar is the name of the file containing the docker image
 
 ### Create an IOx compatible application package
-In this section we will create an IOx application package from the docker image (modbus_app:1.0) and 
-the package descriptor file (package.yaml). From the app/project directory, run below ```ioxclient``` command 
+In this section we will create an IOx application package from the docker image (modbus_app:1.0) and
+the package descriptor file (package.yaml). From the app/project directory, run below ```ioxclient``` command
 to create the IOx app package. Detailed info about ```ioxclient``` can be found [here.](https://developer.cisco.com/media/iox-dev-guide-11-28-16/ioxclient/ioxclient-reference/)
 
 ```
+$ cd app/project
 $ ioxclient docker package modbus_app:1.0 .
 ```
 
@@ -410,7 +418,7 @@ ioxclient and local manager approaches below.
 
 ### Activating the app
 Administrator will assess the resources requested by the application in ```package.yaml``` and allot
-the appropriate resources available at that time to the application.  
+the appropriate resources available at that time to the application.
 #### ioxclient
 Admin will create the ```activation.json``` file with final resources that will be allocated for the application.
 
@@ -538,7 +546,7 @@ file located [here.](http://gitlab.cisco.com/iox/mqtt_app/blob/master/freeboard/
 Note: Make sure to update the data source with correct dweet name with which modbus application is dweeting the data.
 
 Once we have everything setup, the weather and location data should flow in from raspberry pi to IR829 modbus app and then to freeboard
-dashboard. 
+dashboard.
 ![Dashboard](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/freeboard%20screenshot.png)
 
 ## [Step 6]  Troubleshooting the app
