@@ -273,7 +273,7 @@ $ sudo docker build -t modbus_app_src:1.0 .
 ```
 
 ##### Run the image1 locally and install dependant modules
-Now run the docker image1 locally and mount the host location ```app/``` onto docker container path ```/opt/share```. As part of this command run the script ```pip_install_script```, which we earlier
+Now run the docker image1 locally and mount the host location ```app/pip_output``` onto docker container path ```/opt/share```. As part of this command lets run the script ```pip_install_script```, which we earlier
 copied into docker image, so that we can install the dependant modules on the mounted path.
 
 ```
@@ -283,7 +283,7 @@ $ sudo docker run -v ${PWD}/pip_output:/opt/share -it modbus_app_src:1.0 /bin/sh
 Password:
 $
 ```
-Now we have installed all the application dependant python packages at location ```app/lib```.
+Now we have installed all the application dependant python packages at location ```app/pip_output```.
 
 ```
 $ cd app/pip_output
