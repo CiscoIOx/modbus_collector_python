@@ -213,7 +213,7 @@ signal.signal(signal.SIGINT, _sleep_handler)
 In this section we will look at how to build docker image utilizing cisco hosted docker image. We will follow 2-step
 approach to build optimal sized docker image.
 
-1. Build the first docker image by installing all the application run-time dependencies on a mounted host location. If required, build the application as well.
+1. Build the first docker image to install all the application run-time dependencies on a mounted host location. If required, build the application as well.
 2. Build the second docker image by copying the application and its dependency binaries.
 
 By copying just the binaries, we can significantly reduce the docker image size.
@@ -234,7 +234,7 @@ wsgiref
 ```
 
 Create a script ```pip_install_script.sh``` to do ```pip install``` of all the python
-modules needed by the application.
+modules needed by the application on a specific location (```--install-option```).
 
 ```
 $ cat pip_install_script.sh
