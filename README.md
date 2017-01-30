@@ -16,7 +16,7 @@ You will need following hardware and software components to get started.
 
 End to end setup for the modbus application can be picturized as below.
 
-![Solution](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Solution_block_diagram.png)
+![Solution](images/Solution_block_diagram.png)
 ### Modbus slave simulator
 Modbus slave simulator randomly generates the following weather and location data which are then
 stored in holding registers. And the simulator also updates the data for every few seconds.
@@ -80,7 +80,7 @@ Table of Contents
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 Here is the pictorial representation of the steps.
 
-![Developer Jounery](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Developer%20Journey.png)
+![Developer Jounery](images/Developer%20Journey.png)
 
 ## [Step 1] Develop/Build/Packaging the application
 In this section we will look at how to develop the application using IOx specific concepts,
@@ -438,14 +438,14 @@ $ ioxclient application activate modbus_app --payload activation.json
 Access the local manager (LM) of IOx from a browser at ```http://IOx platform IP address:IOx platform port number```.
 
 ``` For example - http://172.27.89.2:8443 ```
-![Local Manager](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Local%20manager.png)
+![Local Manager](images/Local%20manager.png)
 
 Now you would see in LM that the application named ```modbus_app``` has been deployed on the device. Then click ```activate```
 action link corresponding to the app. This will bring up the resouces page where we can finalize the
 resources like profile and network config that will be alloted to the application. Press ```activate``` button
 to confirm the allocation of the resources.
 
-![Activation](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/Local%20manager%20-%20App%20Activation.png)
+![Activation](images/Local%20manager%20-%20App%20Activation.png)
 
 
 ### Update application bootstrap configuration
@@ -533,26 +533,26 @@ ioxclient app start modbus_app
 ```
 
 In local manager, we can start/stop the application by pressing action link ```start``` or ```stop``` respectively correspoding to the app.
-![Start app](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_Start_app.png)
+![Start app](images/LM_Start_app.png)
 
 ## [Step 5] Visualize the data
 In this section, we will look at how to setup freeboard.io to visualize the data sent by the modbus application.
 
 Log into freeboard.io and create a new dashbaord. Now setup the dashboard's datasource and widgets by importing the json
-file located [here.](http://gitlab.cisco.com/iox/mqtt_app/blob/master/freeboard/cisco-table-1.json)
+file located [here.](freeboard/cisco-table-1.json)
 
 Note: Make sure to update the data source with correct dweet name with which modbus application is dweeting the data.
 
 Once we have everything setup, the weather and location data should flow in from raspberry pi to IR829 modbus app and then to freeboard
 dashboard.
-![Dashboard](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/freeboard%20screenshot.png)
+![Dashboard](images/freeboard%20screenshot.png)
 
 ## [Step 6]  Troubleshooting the app
 ### Viewing application logs
 In LM, click ```manage``` action corresponding to the application and select the ```Logs``` tab. Here we can download the application
 log file ```modbus_app.log```.
-![Troubleshoot](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot.png)
-![Manage section](http://gitlab.cisco.com/iox/modbus_app/raw/master/images/LM_troubleshoot_manage.png)
+![Troubleshoot](images/LM_troubleshoot.png)
+![Manage section](images/LM_troubleshoot_manage.png)
 ### Connecting to the app console
 We can connect to the application console using below ioxclient command.
 
